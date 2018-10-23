@@ -1,8 +1,12 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const autoprefixer = require('autoprefixer');
 
 module.exports = {
+	devServer: {
+		watchOptions: {
+			poll: true
+		}
+	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
@@ -35,17 +39,6 @@ module.exports = {
 							},
 							importLoaders: 1,
 						}
-					},
-					{
-						loader: "postcss-loader",
-						options: {
-							autoprefixer: {
-								browsers: ["last 2 versions"]
-							},
-							plugins: () => [
-								autoprefixer
-							]
-						},
 					},
 					{
 						loader: "sass-loader",

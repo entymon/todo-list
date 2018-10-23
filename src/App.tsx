@@ -1,17 +1,15 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import ToDoList from "./components/ToDoList";
 
 export interface HelloProps { compiler: string; framework: string; }
 
-class App extends React.Component<HelloProps, {}> {
+export default class App extends React.Component<HelloProps, {}> {
   render() {
-    return <h1 className="test-class">Hello from {this.props.compiler} and {this.props.framework}!</h1>;
+    return (
+      <div>
+        <h1 className="test-class">Test Hello from {this.props.compiler} and {this.props.framework}!</h1>
+        <ToDoList />
+      </div>
+    );
   }
 }
-
-export default App;
-
-ReactDOM.render(
-  <App compiler="TypeScript" framework="React" />,
-  document.getElementById("app")
-);
