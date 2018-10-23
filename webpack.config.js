@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
 	devServer: {
+		historyApiFallback: true,
 		watchOptions: {
 			poll: true
 		}
