@@ -8,9 +8,9 @@ export default class Menu extends React.Component {
       <div>
         <ul>
           <li>
-            <Link to={`/`}>List</Link>
-            <Link to={`/create`}>Add Todo</Link>
-            <Link to={`/edit`}>Edit Todo</Link>
+            <Link className="test-class" to={`/`}>List</Link>
+            <Link className="test-class" to={`/create`}>Add Todo</Link>
+            <Link className="test-class" to={`/edit`}>Edit Todo</Link>
           </li>
         </ul>
       </div>
