@@ -1,9 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import App from "./App";
 import style from "./assets/scss/main.scss";
+import configureStore from "./store/ConfigStore";
+
+const store = configureStore();
 
 ReactDOM.render(
-	<App compiler="TypeScript" framework="React" />,
+	<Provider store={store}>
+		<App />
+	</Provider>,
 	document.getElementById("app")
 );
