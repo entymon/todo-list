@@ -16,9 +16,9 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
     date: moment()
   };
 
-  _handleChangeDate = (event: any) => {
+  _handleChangeDate = (date: moment.Moment) => {
     this.setState({
-      name: event.target.value
+      date: date
     })
   };
 
@@ -41,23 +41,33 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
           <div className="create-form__top">
 
             <div className="input-field">
-              <label htmlFor="todo-name">Name
-                <span className="error-note">Error message</span>
+              <label htmlFor="todo-name">
+                <div className="input-label">
+                  <p className="title">Name</p>
+                  <span className="error-note">Error message</span>
+                </div>
                 <input
                   className="input"
                   id="todo-name"
                   name="todo-name"
                   value={this.state.name}
                   onChange={this._handleChangeName}
+                  placeholder="Title of TO DO"
                 />
               </label>
             </div>
 
             <div className="date-field">
-              <DatePicker
-                selected={this.state.date}
-                onChange={this._handleChangeDate}
-              />
+              <label htmlFor="todo-name">
+                <div className="input-label">
+                  <p className="title">Date</p>
+                </div>
+                <DatePicker
+                  selected={this.state.date}
+                  onChange={this._handleChangeDate}
+                />
+              </label>
+
             </div>
 
           </div>
