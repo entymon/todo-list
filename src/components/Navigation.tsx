@@ -81,21 +81,25 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
         </div>
 
         <div
-          className="hidden-content records-list"
+          className="hidden-content"
           style={{
             maxHeight: this.state.toggleListOfRecords ? '500px' : '0',
           }}
         >
-          <ListOfRecords/>
+          <div className="hidden-content__inner">
+            <ListOfRecords/>
+          </div>
         </div>
 
         <div
-          className="hidden-content create-form"
+          className="hidden-content"
           style={{
             maxHeight: this.state.toggleAddNewToDo ? '500px' : '0',
           }}
         >
-          <CreateForm/>
+          <div className="hidden-content__inner">
+            <CreateForm/>
+          </div>
         </div>
       </div>
     );
