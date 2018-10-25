@@ -1,0 +1,70 @@
+/**
+  List icon image
+ */
+
+.list-icon-wrapper {
+  .list-icon {
+    width: 30px;
+    &__element {
+      transition: all .2s;
+      border-top: 3px solid $black;
+      padding-bottom: 10px;
+    }
+    &__element-last {
+      border-top: 3px solid $black;
+      padding-bottom: 0;
+    }
+
+  }
+  &:hover {
+    .list-icon {
+      &__element {
+        transform: translateY(13px);
+      }
+    }
+  }
+}
+
+/**
+  Plus icon image
+ */
+
+.plus-icon-wrapper {
+  .plus-icon {
+    position: relative;
+    width: 30px;
+    height: 30px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      border-left: 4px solid $black;
+      height: 100%;
+      color: $black;
+      top: 0;
+      left: 13px;
+      z-index: 1;
+      transition: transform .2s;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      border-top: 4px solid $black;
+      width: 100%;
+      color: $black;
+      top: 13px;
+      left: 0;
+      z-index: 2;
+    }
+  }
+
+  &:hover {
+
+    .plus-icon {
+      &:before {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}

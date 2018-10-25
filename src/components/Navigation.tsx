@@ -1,9 +1,13 @@
 import React from 'react';
 import Recorder from "./navigation/Recorder";
 import Button from "./parts/Button";
+import ListIcon from "./parts/ListIcon";
+import PlusIcon from "./parts/PlusIcon";
 
 export interface NavigationStatesInterface {
-  recorderStatus: boolean
+  recorderStatus: boolean,
+  toggleListOfRecords: boolean,
+  toggleAddNewToDo: boolean
 }
 
 export default class Navigation extends React.Component<{}, NavigationStatesInterface> {
@@ -15,16 +19,16 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
     toggleAddNewToDo: false,
   };
 
-  _renderListOfRecordsButton = () => {
-    return (
-      <div>list of records button</div>
-    );
+  _toggleListOfRecords = () => {
+    this.setState({
+      toggleListOfRecords: !this.state.toggleListOfRecords
+    })
   };
 
-  _renderCreateToDoButton = () => {
-    return (
-      <div>Add new button</div>
-    );
+  _toggleCreateToDo = () => {
+    this.setState({
+      toggleListOfRecords: !this.state.toggleAddNewToDo
+    })
   };
 
   _changeRecordingStatus = () => {
@@ -33,23 +37,15 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
     });
   };
 
-  _listIconImage = () => {
+  _renderListIcon = () => {
     return (
-      <div style={{
-        width: '30px'
-      }}>
-        <div style={{
-          borderTop: `3px solid #000`,
-          paddingBottom: '10px'
-        }}/>
-        <div style={{
-          borderTop: `3px solid #000`,
-          paddingBottom: '10px'
-        }}/>
-        <div style={{
-          borderTop: `3px solid #000`,
-        }}/>
-      </div>
+      <ListIcon status={false}/>
+    );
+  };
+
+  _renderPlusIcon = () => {
+    return (
+      <PlusIcon status={false}/>
     );
   };
 
@@ -62,10 +58,10 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
               <Recorder status={this.state.recorderStatus} callback={this._changeRecordingStatus}/>
           </div>
           <div className="nav-section">
-              <Button label={'Records List'} icon={this._listIconImage()} callback={() => {}}/>
+              <Button label={'Records List'} icon={this._renderListIcon()} callback={this._toggleListOfRecords}/>
           </div>
           <div className="nav-section">
-              {this._renderCreateToDoButton()}
+            <Button label={'Add ToDo'} icon={this._renderPlusIcon()} callback={this._toggleCreateToDo}/>
           </div>
         </div>
       </div>

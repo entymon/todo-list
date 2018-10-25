@@ -3,5 +3,15 @@
   flex-direction: row;
   .nav-section {
     flex: 1 0;
+
+    &:nth-child(2) {
+      display: flex;
+      justify-content: center;
+    }
+
+    &:nth-child(3) {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 }

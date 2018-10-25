@@ -3,9 +3,9 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  transition: all .2s;
 
   .recording-icon {
+
     width: 30px;
     height: 30px;
     border-radius: 100%;
@@ -15,6 +15,12 @@
 
     &__stop {
       border-radius: 0;
+    }
+  }
+
+  &:hover {
+    .recording-icon {
+      background-color: $red;
     }
   }
 

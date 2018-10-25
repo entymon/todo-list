@@ -2,14 +2,19 @@
 @import "config/colors";
 @import "config/screenSize";
 
+@import "mixins";
+
 @import "parts/wrapper";
 @import "parts/button";
+@import "parts/images";
 
 @import "pages/toDoList";
 
 @import "components/header";
 @import "components/navigation";
 @import "components/recorder";
+
+
 
 body {
   margin: 0;

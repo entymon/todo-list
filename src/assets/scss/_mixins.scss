@@ -1,0 +1,7 @@
+@mixin transitionBackgroundColor($time: .2s, $type: linear) {
+  -webkit-transition: background-color $time $type;
+  -moz-transition: background-color $time $type;
+  -o-transition: background-color $time $type;
+  -ms-transition: background-color $time $type;
+  transition: background-color $time $type;
+}
