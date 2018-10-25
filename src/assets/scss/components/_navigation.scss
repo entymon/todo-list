@@ -1,0 +1,7 @@
+.navigation {
+  display: flex;
+  flex-direction: row;
+  .nav-section {
+    flex: 1 0;
+  }
+}

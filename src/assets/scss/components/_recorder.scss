@@ -1,0 +1,21 @@
+.recorder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  transition: all .2s;
+
+  .recording-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: $black;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    &__stop {
+      border-radius: 0;
+    }
+  }
+
+}
