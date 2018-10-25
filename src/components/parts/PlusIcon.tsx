@@ -13,7 +13,7 @@ export default class PlusIcon extends React.Component<PlusIconInterfaceProps, {}
   render() {
     return (
       <div className="plus-icon-wrapper">
-        <div className='plus-icon'></div>
+        <div className='plus-icon' />
       </div>
     );
   }

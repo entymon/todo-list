@@ -14,14 +14,6 @@
       border-top: 3px solid $black;
       padding-bottom: 0;
     }
-
-  }
-  &:hover {
-    .list-icon {
-      &__element {
-        transform: translateY(13px);
-      }
-    }
   }
 }
 
@@ -31,6 +23,7 @@
 
 .plus-icon-wrapper {
   .plus-icon {
+    transition: transform .2s;
     position: relative;
     width: 30px;
     height: 30px;
@@ -58,12 +51,16 @@
       z-index: 2;
     }
   }
+}
 
-  &:hover {
-
-    .plus-icon {
-      &:before {
-        transform: rotate(90deg);
+/**
+  button customization
+ */
+.button-active {
+  .button__icon {
+    > .plus-icon-wrapper {
+      > .plus-icon {
+        transform: rotate(45deg);
       }
     }
   }
