@@ -15,6 +15,42 @@
     left:50%;
     transform: translate(-50%,-50%);
 
+    .modal-nav {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 10px 0 0;
+      cursor: pointer;
+      .cross-icon {
+        transition: transform .2s;
+        position: relative;
+        transform: rotate(45deg);
+        width: 20px;
+        height: 20px;
+
+        &:before {
+          content: '';
+          position: absolute;
+          border-left: 4px solid $black;
+          height: 100%;
+          color: $black;
+          top: 0;
+          left: 8px;
+          z-index: 1;
+          transition: transform .2s;
+        }
+
+        &:after {
+          content: '';
+          position: absolute;
+          border-top: 4px solid $black;
+          width: 100%;
+          color: $black;
+          top: 8px;
+          left: 0;
+          z-index: 2;
+        }
+      }
+    }
     .modal-content {
       h2, p {
         text-align: center;
@@ -66,5 +102,7 @@
     display: none;
   }
 }
+
+
 
 

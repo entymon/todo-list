@@ -5,14 +5,18 @@ import Modal, {ModalLabelsInterface} from "../components/Modal";
 
 export default class ToDo extends React.Component {
 
-  state = { show: false };
+  state = {
+    showSuccess: false,
+    showAlert: false,
+    showConfirm: false
+  };
 
   showModal = () => {
-    this.setState({ show: true });
+    this.setState({ showSuccess: true });
   };
 
   hideModal = () => {
-    this.setState({ show: false });
+    this.setState({ showSuccess: false });
   };
 
   render() {
@@ -38,10 +42,14 @@ export default class ToDo extends React.Component {
         <ToDoElement/>
         
         <Modal
-          show={this.state.show}
-          closeCallback={false}
+          show={this.state.showSuccess}
+          closeCallback={this.hideModal}
           actionCallback={this.hideModal}
           labels={labels}
+          actions={{
+            showCancel: false,
+            showConfirm: true
+          }}
         >
           {modalContent}
         </Modal>
