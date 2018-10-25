@@ -1,11 +1,15 @@
-@import "config/fontSize";
+@import "config/fonts";
+@import "config/colors";
+@import "config/screenSize";
+@import "parts/wrapper";
 
 @import "pages/toDoList";
 
+@import "components/header";
+
 body {
-    line-height: 2;
+  margin: 0;
+  font-family: $mainFont;
+  font-size: $fontDefault;
 }
-.test-class {
-    color: red;
-    font-size: $fontDefault;
-}
+

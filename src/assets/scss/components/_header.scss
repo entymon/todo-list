@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  justify-content: center;
+  > h2 {
+    font-size: $headerSize;
+    line-height: $headerSize;
+    color: $white;
+  }
+}

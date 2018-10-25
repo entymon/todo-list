@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  &__menu {
+    flex: 0 0 150px;
+    background-color: $blue;
+  }
+  &__page {
+    flex: 1 0 auto;
+    background-color: $backgroundPageColor;
+  }
+}
+
+div.page {
+  max-width: $desktopSize;
+  margin: 0 auto;
+}
+
+div.content {
+  background-color: $white;
+  padding: 40px;
+}
