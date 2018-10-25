@@ -35,10 +35,14 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
     })
   };
 
+  _handleSubmitForm = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   render() {
     return (
       <div className="create-form">
-        <form>
+        <form onSubmit={this._handleSubmitForm}>
           <div className="create-form__top">
 
             <div className="input-field">
@@ -53,7 +57,7 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
                   name="todo-name"
                   value={this.state.name}
                   onChange={this._handleChangeName}
-                  placeholder="Title of TO DO"
+                  placeholder="ToDo title"
                 />
               </label>
             </div>
@@ -73,17 +77,31 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
             </div>
 
           </div>
+
           <div className="create-form__bottom">
+
             <div className="textarea-field">
               <label>
-                Description:
-                <span className="error-note">Error message</span>
+                <div className="textarea-label">
+                  <p className="title">Description</p>
+                  <span className="error-note">Error message</span>
+                </div>
                 <textarea
+                  className="text-area"
+                  placeholder="ToDo description"
+                  cols={30}
+                  rows={5}
                   value={this.state.description}
                   onChange={this._handleChangeDescription}
                 />
               </label>
             </div>
+          </div>
+
+          <div className="create-form__submit">
+            <button className="submit-button" type="submit" value="Submit">
+              Save
+            </button>
           </div>
         </form>
       </div>

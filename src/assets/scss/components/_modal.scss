@@ -1,0 +1,70 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+  .modal-main {
+    position:fixed;
+    background: white;
+    width: 300px;
+    height: auto;
+    top: 40vh;
+    left:50%;
+    transform: translate(-50%,-50%);
+
+    .modal-content {
+      h2, p {
+        text-align: center;
+      }
+    }
+    .modal-controls {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+
+      .modal-controller {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      button.modal-button {
+        flex: 1 0 auto;
+        border: 0;
+        border-radius: 0;
+        font-size: $fontDefault;
+        color: $white;
+        padding: 12px 30px;
+        cursor: pointer;
+        transition: opacity .2s;
+
+        &:hover {
+          opacity: .7;
+        }
+        &:focus {
+          outline: none;
+        }
+
+        &__reject {
+          background-color: $alertColor;
+        }
+        &__confirm {
+          background-color: $blue;
+        }
+      }
+    }
+  }
+
+  &.modal-show {
+    display: flex;
+  }
+
+  &.modal-hide {
+    display: none;
+  }
+}
+
+

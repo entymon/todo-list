@@ -8,13 +8,18 @@
   }
 
   &__bottom {
+    margin-top: 30px;
+  }
 
+  &__submit {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
   }
 }
 
 .input-field,
-.date-field
-{
+.date-field {
   flex: 0 0 300px;
   label {
     display: flex;
@@ -32,10 +37,31 @@
     }
   }
 }
+.input-field {
+  margin-right: 10px;
+}
+
+.textarea-field {
+  label {
+    display: flex;
+    flex-direction: column;
+    div.textarea-label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 30px;
+
+      p.title {
+        font-weight: 700;
+        margin: 0;
+      }
+    }
+  }
+}
 
 span.error-note {
   margin-left: 10px;
-  color: $errorColor;
+  color: $alertColor;
   font-size: $fontError;
 }
 
@@ -47,12 +73,42 @@ input.input {
   padding: 0 5px;
 }
 
-div.react-datepicker__input-container {
-  > input {
-    height: 30px;
-    border: 1px solid $formElementBorderColor;
-    line-height: 30px;
-    font-size: $fontDefault;
-    padding: 0 5px;
+textarea.text-area {
+  border: 1px solid $formElementBorderColor;
+  font-size: $fontDefault;
+  padding: 5px;
+  resize: none;
+}
+
+button.submit-button {
+  border: 0;
+  border-radius: 0;
+  font-size: $fontDefault;
+  background-color: $blue;
+  color: $white;
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: opacity .2s;
+
+  &:hover {
+    opacity: .7;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+div.react-datepicker-wrapper {
+  width: 100%;
+  div.react-datepicker__input-container {
+    width: 100%;
+    > input {
+      height: 30px;
+      border: 1px solid $formElementBorderColor;
+      line-height: 30px;
+      font-size: $fontDefault;
+      padding: 0 5px;
+      width: calc(100% - 12px);
+    }
   }
 }

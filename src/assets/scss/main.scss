@@ -11,6 +11,7 @@
 @import "pages/toDoList";
 
 @import "components/header";
+@import "components/modal";
 @import "components/navigation";
 @import "components/recorder";
 @import "components/createForm";
@@ -24,7 +25,8 @@ body {
   font-size: $fontDefault;
 }
 
-input {
+input,
+textarea {
   &:focus {
     outline: none;
   }
