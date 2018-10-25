@@ -1,6 +1,7 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import {DATE_FORMAT} from "../constants/Constants";
 
 interface CreateFormStatesInterface {
   name: string;
@@ -65,6 +66,7 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
                 <DatePicker
                   selected={this.state.date}
                   onChange={this._handleChangeDate}
+                  dateFormat={DATE_FORMAT}
                 />
               </label>
 

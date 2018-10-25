@@ -24,3 +24,9 @@ body {
   font-size: $fontDefault;
 }
 
+input {
+  &:focus {
+    outline: none;
+  }
+}
+

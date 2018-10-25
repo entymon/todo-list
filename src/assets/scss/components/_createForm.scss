@@ -46,3 +46,13 @@ input.input {
   font-size: $fontDefault;
   padding: 0 5px;
 }
+
+div.react-datepicker__input-container {
+  > input {
+    height: 30px;
+    border: 1px solid $formElementBorderColor;
+    line-height: 30px;
+    font-size: $fontDefault;
+    padding: 0 5px;
+  }
+}
