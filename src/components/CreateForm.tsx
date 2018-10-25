@@ -1,11 +1,25 @@
-import React, {DOMElement} from 'react';
+import React from 'react';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
-export default class CreateForm extends React.Component {
+interface CreateFormStatesInterface {
+  name: string;
+  description: string;
+  date: moment.Moment;
+}
+
+export default class CreateForm extends React.Component<{}, CreateFormStatesInterface> {
 
   state = {
     name: '',
     description: '',
-    date: ''
+    date: moment()
+  };
+
+  _handleChangeDate = (event: any) => {
+    this.setState({
+      name: event.target.value
+    })
   };
 
   _handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +39,7 @@ export default class CreateForm extends React.Component {
       <div className="create-form">
         <form>
           <div className="create-form__top">
+
             <div className="input-field">
               <label htmlFor="todo-name">Name
                 <span className="error-note">Error message</span>
@@ -37,6 +52,14 @@ export default class CreateForm extends React.Component {
                 />
               </label>
             </div>
+
+            <div className="date-field">
+              <DatePicker
+                selected={this.state.date}
+                onChange={this._handleChangeDate}
+              />
+            </div>
+
           </div>
           <div className="create-form__bottom">
             <div className="textarea-field">
