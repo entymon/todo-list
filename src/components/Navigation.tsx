@@ -18,7 +18,7 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
     recorderStatus: false,
 
     toggleListOfRecords: false,
-    toggleAddNewToDo: false,
+    toggleAddNewToDo: true, // TODO: remove after dev
   };
 
   _toggleListOfRecords = () => {
