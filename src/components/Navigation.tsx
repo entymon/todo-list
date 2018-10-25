@@ -1,5 +1,6 @@
 import React from 'react';
 import Recorder from "./navigation/Recorder";
+import Button from "./parts/Button";
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean
@@ -9,6 +10,9 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
 
   state = {
     recorderStatus: false,
+
+    toggleListOfRecords: false,
+    toggleAddNewToDo: false,
   };
 
   _renderListOfRecordsButton = () => {
@@ -29,6 +33,26 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
     });
   };
 
+  _listIconImage = () => {
+    return (
+      <div style={{
+        width: '30px'
+      }}>
+        <div style={{
+          borderTop: `3px solid #000`,
+          paddingBottom: '10px'
+        }}/>
+        <div style={{
+          borderTop: `3px solid #000`,
+          paddingBottom: '10px'
+        }}/>
+        <div style={{
+          borderTop: `3px solid #000`,
+        }}/>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className="content">
@@ -38,7 +62,7 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
               <Recorder status={this.state.recorderStatus} callback={this._changeRecordingStatus}/>
           </div>
           <div className="nav-section">
-              {this._renderListOfRecordsButton()}
+              <Button label={'Records List'} icon={this._listIconImage()} callback={() => {}}/>
           </div>
           <div className="nav-section">
               {this._renderCreateToDoButton()}

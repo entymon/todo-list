@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface RecorderProps {
+export interface RecorderInterfaceProps {
   status: boolean
   callback: any
 }
 
-export default class Recorder extends React.Component<RecorderProps, {}> {
+export default class Recorder extends React.Component<RecorderInterfaceProps, {}> {
 
   static defaultProps = {
     status: false,
@@ -13,7 +13,6 @@ export default class Recorder extends React.Component<RecorderProps, {}> {
 
   render() {
 
-    console.log(this.props.status, 'status');
     return (
       <div
         className={`recorder ${this.props.status ? 'stop-recording-class' : 'start-recording-class'}`}
