@@ -55,6 +55,11 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     this.props.dispatch(updateToDo(updateToDoList));
   };
 
+  /**
+   * Animation for removed element
+   * @param {number} id
+   * @private
+   */
   _fadingDone = (id: number) => {
     const filteredList = this.props.todoList.filter(element =>
       element.id !== id
@@ -62,6 +67,10 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     this.props.dispatch(updateToDo(filteredList));
   };
 
+  /**
+   * Remove TODO element
+   * @private
+   */
   _removeToDoElement = () => {
     if (this.state.todoId !== 0) {
 
@@ -69,13 +78,21 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
       const elementDOM = document.getElementById(elementId);
       elementDOM.addEventListener('animationend', () => this._fadingDone(this.state.todoId));
       elementDOM.classList.add('fade-out');
-
-      // const filteredList = this.props.todoList.filter(element =>
-      //   element.id !== this.state.todoId
-      // );
-      // this.props.dispatch(updateToDo(filteredList));
       this._hideAlertModal();
     }
+  };
+
+  /**
+   * Update TODO element
+   * @param {ToDoElementInterface} data
+   * @private
+   */
+  _updateToDoElement = (data: ToDoElementInterface) => {
+    const filteredList = this.props.todoList.filter(element =>
+      element.id !== data.id
+    );
+    filteredList.concat(data);
+    this.props.dispatch(updateToDo(filteredList));
   };
 
   componentDidMount() {
@@ -100,14 +117,13 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
       <div className="page">
 
         <Navigation />
-
         {
           this.props.todoList.map((element: ToDoElementInterface) => (
             <ToDoElement
               key={`todo-element-${element.id}`}
               data={element}
               removeCallback={this._showAlertModal}
-              editCallback={() => {}}
+              editCallback={this._updateToDoElement}
             />
           ))
         }

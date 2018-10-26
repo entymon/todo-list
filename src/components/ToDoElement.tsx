@@ -1,7 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import {triggerAsyncId} from "async_hooks";
 import {DATE_FORMAT} from "../constants/Constants";
+import Modal, {ModalLabelsInterface} from "./Modal";
+import {CreateToDoFormErrorInterface} from "./CreateForm";
+import ToDoService from "../services/ToDoService";
 
 const editIcon = require('../assets/images/pencil-icon.svg') as string;
 const removeIcon = require('../assets/images/trash.svg') as string;
@@ -13,6 +15,7 @@ export interface ToDoElementInterface {
   description: string;
   date: moment.Moment
 }
+
 export interface ToDoElementPropsInterface {
   data: ToDoElementInterface,
   removeCallback: any,
@@ -22,13 +25,32 @@ export interface ToDoElementPropsInterface {
 export interface ToDoElementStatesInterface {
   showMoreLess: boolean;
   activeDescCover: boolean;
+  editMode: boolean;
+  showConfirmFlag: boolean;
+
+  id: string;
+  name: string;
+  description: string;
+  date: moment.Moment;
+  errors: CreateToDoFormErrorInterface
 }
 
 export default class ToDoElement extends React.Component<ToDoElementPropsInterface, ToDoElementStatesInterface> {
 
   state: ToDoElementStatesInterface = {
     showMoreLess: false,
-    activeDescCover: true
+    activeDescCover: true,
+    editMode: false,
+    showConfirmFlag: false,
+
+    id: '',
+    name: '',
+    description: '',
+    date: moment(),
+    errors: {
+      name: false,
+      description: false
+    }
   };
 
   _toggleMoreLess = () => {
@@ -37,11 +59,85 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     });
   };
 
-  componentDidMount() {
-    const desciptionContentHeight = document.getElementById(`todo-description-${this.props.data.id}`).offsetHeight;
-    if (desciptionContentHeight < 200) {
+  _editMode = () => {
+    this.setState({
+      editMode: true,
+      name: this.props.data.name,
+      description: this.props.data.description,
+      date: this.props.data.date,
+    })
+  };
+
+  _viewMode = () => {
+    this.setState({
+      editMode: false,
+      name: '',
+      description: '',
+      date: moment(),
+    })
+  };
+
+  _showConfirmModal = () => {
+    this.setState({
+      showConfirmFlag: true
+    })
+  };
+
+  _hideConfirmModal = () => {
+    this.setState({
+      showConfirmFlag: false
+    })
+  };
+
+  _updateToDoElement = () => {
+    event.preventDefault();
+    const errors = ToDoService.validForm({
+      name: this.state.name,
+      description: this.state.description,
+      date: this.state.date,
+    });
+
+    if (ToDoService.formValid) {
+      // clear form
       this.setState({
-        activeDescCover: false
+        name: '',
+        description: '',
+        date: moment(),
+        errors: {
+          name: false,
+          description: false
+        }
+      });
+
+      // show confirm modal
+      this._showConfirmModal();
+
+      // return data
+      this.props.editCallback({
+        id: this.props.data.id,
+        name: this.state.name,
+        description: this.state.description,
+        date: this.state.date,
+      });
+
+    } else {
+
+      // send form errors
+      this.setState({
+        errors
+      })
+    }
+  };
+
+  componentDidMount() {
+    const descriptionContentHeight = document.getElementById(`todo-description-${this.props.data.id}`).offsetHeight;
+    if (descriptionContentHeight < 200) {
+      this.setState({
+        activeDescCover: false,
+        id: `${this.props.data.id}`,
+        name: this.props.data.name,
+        description: this.props.data.description,
+        date: this.props.data.date,
       })
     }
   };
@@ -51,40 +147,97 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     const showMoreLess = this.state.activeDescCover ? (this.state.showMoreLess ? 'less' : 'more ...') : '';
     const todoDescriptionCoverClass = this.state.activeDescCover ? (this.state.showMoreLess ? '' : 'todo-short-description') : '';
 
+    const labels: ModalLabelsInterface = {
+      cancel: 'NO',
+      confirm: 'YES',
+    };
+
+    const confirmModalContent = (
+      <div>
+        <h2>Confirm</h2>
+        <p>Do you want update this card?</p>
+      </div>
+    );
+
     return (
       <div id={`todo-${this.props.data.id}`} className="content">
-        <div className="todo-element">
-
-          <div className="todo-content">
-            <div className="todo-content__header">
-              <div>
-                {this.props.data.id} # {this.props.data.name}
+        { !this.state.editMode && (
+          <div className="todo-element">
+            <div className="todo-content">
+              <div className="todo-content__header">
+                <div>
+                  {this.props.data.id} # {this.props.data.name}
+                </div>
+                <div>
+                  {this.props.data.date.format(DATE_FORMAT)}
+                </div>
               </div>
-              <div>
-                {this.props.data.date.format(DATE_FORMAT)}
+              <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
+                <div id={`todo-description-${this.props.data.id}`}>
+                  {this.props.data.description}
+                </div>
+                <div className="todo-short-description__cover"/>
               </div>
             </div>
-            <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
-              <div id={`todo-description-${this.props.data.id}`}>
-                {this.props.data.description}
+            <div className="todo-nav">
+              <div onClick={this._editMode}>
+                <img src={editIcon} alt="todo edit"/>
               </div>
-              <div className="todo-short-description__cover" />
+              <div onClick={this._toggleMoreLess}>
+                <span>{showMoreLess}</span>
+              </div>
+              <div onClick={() => this.props.removeCallback(this.props.data.id)}>
+                <img src={removeIcon} alt="todo remove"/>
+              </div>
             </div>
           </div>
+        )}
 
-          <div className="todo-nav">
-            <div>
-              <img src={editIcon} alt="todo edit"/>
+        { this.state.editMode && (
+          <div className="todo-element">
+            <div className="todo-content">
+              <div className="todo-content__header">
+                <div>
+                  {this.props.data.id} # {this.props.data.name}
+                </div>
+                <div>
+                  {this.props.data.date.format(DATE_FORMAT)}
+                </div>
+              </div>
+              <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
+                <div id={`todo-description-${this.props.data.id}`}>
+                  {this.props.data.description}
+                </div>
+                <div className="todo-short-description__cover"/>
+              </div>
             </div>
-            <div onClick={this._toggleMoreLess}>
-              <span>{showMoreLess}</span>
-            </div>
-            <div onClick={() => this.props.removeCallback(this.props.data.id)}>
-              <img src={removeIcon} alt="todo remove"/>
+
+            <div className="todo-nav">
+              <div onClick={this._showConfirmModal}>
+                <img src={saveIcon} alt="todo update"/>
+              </div>
+              <div onClick={this._viewMode}>
+                <span>close</span>
+              </div>
+              <div onClick={() => this.props.removeCallback(this.props.data.id)}>
+                <img src={removeIcon} alt="todo remove"/>
+              </div>
             </div>
           </div>
+        )}
 
-        </div>
+        <Modal
+          show={this.state.showConfirmFlag}
+          closeCallback={this._hideConfirmModal}
+          actionCallback={this._updateToDoElement}
+          labels={labels}
+          actions={{
+            showCancel: true,
+            showConfirm: true
+          }}
+        >
+          {confirmModalContent}
+        </Modal>
       </div>
     );
   }
