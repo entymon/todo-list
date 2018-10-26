@@ -1,0 +1,67 @@
+@mixin coverGradient() {
+  background: rgba(255,255,255,0);
+  background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(60%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,1)));
+  background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%);
+  background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%);
+  background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 60%, rgba(255,255,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
+}
+
+
+.todo-element {
+
+  .todo-content {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 15px;
+      border-bottom: 1px solid $black;
+    }
+    &__description {
+      padding-top: 20px;
+      padding-bottom: 60px;
+      line-height: 28px;
+      overflow: hidden;
+      max-height: 500px;
+    }
+  }
+  .todo-nav {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    div {
+      display: flex;
+      flex: 0 0 40px;
+      cursor: pointer;
+      > span {
+        text-align: center;
+        justify-content: center;
+      }
+      > img {
+        width: 30px;
+        height: 30px;
+      }
+      &:nth-child(2) {
+        flex: 0 0 80px;
+        align-items: center;
+      }
+      &:last-child {
+        justify-content: flex-end;
+      }
+    }
+  }
+  .todo-short-description {
+    position: relative;
+    max-height: 100px;
+
+    > div.todo-short-description__cover {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100px;
+      @include coverGradient();
+    }
+  }
+}

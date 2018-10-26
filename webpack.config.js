@@ -9,10 +9,19 @@ module.exports = {
 		}
 	},
 	resolve: {
-		extensions: [".ts", ".tsx", ".js", ".json"]
+		extensions: [".ts", ".tsx", ".js", ".json", "svg", "jpe", "png"]
 	},
 	module: {
 		rules: [
+			{
+				test: /\.(png|jpg|svg)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {}
+					}
+				]
+			},
 			{
 				test: /\.(ts|tsx)$/,
 				exclude: /node_modules/,
