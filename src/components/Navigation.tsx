@@ -8,6 +8,7 @@ import CreateForm, {CreateFormToDoResponseInterface} from "./CreateForm";
 import {connect} from "react-redux";
 import {ToDoElementInterface} from "./ToDoElement";
 import {updateToDo} from "../store/actions/ToDoActions";
+import ToDoService from "../services/ToDoService";
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -132,7 +133,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
   _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
     if (confirm) {
       const toDo: ToDoElementInterface = {
-        id: this.props.todoList.length + 1,
+        id: ToDoService.getShortUuid(),
         name: model.name,
         description: model.description,
         date: model.date

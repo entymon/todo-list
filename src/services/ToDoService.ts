@@ -1,4 +1,5 @@
 import {CreateFormToDoResponseInterface, CreateToDoFormErrorInterface} from "../components/CreateForm";
+const uuidv1 = require('uuid/v1');
 
 export default class ToDoService {
 
@@ -23,5 +24,14 @@ export default class ToDoService {
     }
 
     return errors;
+  };
+
+  /**
+   * Gets last part of UUID make it shorter
+   * @returns {string | undefined}
+   */
+  static getShortUuid = () => {
+    const uuid = uuidv1().split('-');
+    return uuid.pop();
   }
 }

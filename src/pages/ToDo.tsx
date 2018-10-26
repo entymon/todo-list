@@ -1,12 +1,10 @@
 import React from 'react';
 import {connect} from "react-redux";
-import _ from 'lodash';
 import moment = require("moment");
 import Navigation from "../components/Navigation";
 import ToDoElement, {ToDoElementInterface} from "../components/ToDoElement";
 import Modal, {ModalLabelsInterface} from "../components/Modal";
 import {updateToDo} from "../store/actions/ToDoActions";
-import {element} from "prop-types";
 
 export interface ToDoPagePropsInterface {
   todoList?: Array<ToDoElementInterface>;
