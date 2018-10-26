@@ -7,7 +7,7 @@ import ListOfRecords from "./ListOfRecords";
 import CreateForm, {CreateFormToDoResponseInterface} from "./CreateForm";
 import {connect} from "react-redux";
 import {ToDoElementInterface} from "./ToDoElement";
-import {addToDo} from "../store/actions/ToDoActions";
+import {updateToDo} from "../store/actions/ToDoActions";
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -121,7 +121,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
             }}
           >
             <div className="hidden-content__inner">
-              <CreateForm callback={this._createToDoFormUpdate}/>
+              <CreateForm callback={this._addToDoFormCallback}/>
             </div>
           </div>
         )}
@@ -129,7 +129,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
     );
   }
 
-  _createToDoFormUpdate = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
+  _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
     if (confirm) {
       const toDo: ToDoElementInterface = {
         id: this.props.todoList.length + 1,
@@ -139,7 +139,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
       };
 
       const updateToDoList = this.props.todoList.concat(toDo);
-      this.props.dispatch(addToDo(updateToDoList));
+      this.props.dispatch(updateToDo(updateToDoList));
     }
 
     this.setState({

@@ -1,33 +1,86 @@
 import React from 'react';
+import {connect} from "react-redux";
+import _ from 'lodash';
+import moment = require("moment");
 import Navigation from "../components/Navigation";
 import ToDoElement, {ToDoElementInterface} from "../components/ToDoElement";
 import Modal, {ModalLabelsInterface} from "../components/Modal";
-import {connect} from "react-redux";
+import {updateToDo} from "../store/actions/ToDoActions";
+import {element} from "prop-types";
 
 export interface ToDoPagePropsInterface {
-  todoList?: Array<ToDoElementInterface>
+  todoList?: Array<ToDoElementInterface>;
+  dispatch?: any;
+}
+
+export interface ToDoPageStatesInterface {
+  showAlert: boolean;
+  showConfirm: boolean;
+  todoId: number;
+  fadeOut: boolean;
 }
 
 @(connect((store: any) => {
   return {
-    todoList: store.todoReducer.todoList
+    todoList: store.todoReducer.todoList,
   }
 }) as any)
-export default class ToDo extends React.Component<ToDoPagePropsInterface, {}> {
+export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPageStatesInterface> {
 
   state = {
-    showSuccess: false,
     showAlert: false,
-    showConfirm: false
+    showConfirm: false,
+    todoId: 0,
+    fadeOut: false
   };
 
-  showModal = () => {
-    this.setState({ showSuccess: true });
+  _showAlertModal = (id: number) => {
+    this.setState({
+      showAlert: true,
+      todoId: id
+    });
   };
 
-  hideModal = () => {
-    this.setState({ showSuccess: false });
+  _hideAlertModal = () => {
+    this.setState({ showAlert: false });
   };
+
+  _testToDoObject = () => {
+    const updateToDoList = this.props.todoList.concat({
+      id: 1,
+      name: 'Test',
+      description: 'sadasdsadsad asd sda sd',
+      date: moment()
+    });
+    this.props.dispatch(updateToDo(updateToDoList));
+  };
+
+  _fadingDone = (id: number) => {
+    const filteredList = this.props.todoList.filter(element =>
+      element.id !== id
+    );
+    this.props.dispatch(updateToDo(filteredList));
+  };
+
+  _removeToDoElement = () => {
+    if (this.state.todoId !== 0) {
+
+      const elementId = `todo-${this.state.todoId}`;
+      const elementDOM = document.getElementById(elementId);
+      elementDOM.addEventListener('animationend', () => this._fadingDone(this.state.todoId));
+      elementDOM.classList.add('fade-out');
+
+      // const filteredList = this.props.todoList.filter(element =>
+      //   element.id !== this.state.todoId
+      // );
+      // this.props.dispatch(updateToDo(filteredList));
+      this._hideAlertModal();
+    }
+  };
+
+  componentDidMount() {
+    this._testToDoObject();
+  }
 
   render() {
 
@@ -36,10 +89,10 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, {}> {
       confirm: 'YES',
     };
 
-    const modalContent = (
+    const alertModalContent = (
       <div>
-        <h2>Modal</h2>
-        <p>Data</p>
+        <h2>Alert</h2>
+        <p>Are you really would like remove this card?</p>
       </div>
     );
 
@@ -52,12 +105,25 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, {}> {
           this.props.todoList.map((element: ToDoElementInterface) => (
             <ToDoElement
               key={`todo-element-${element.id}`}
-              id={element.id}
-              name={element.name}
-              description={element.description}
-              date={element.date}/>
+              data={element}
+              removeCallback={this._showAlertModal}
+              editCallback={() => {}}
+            />
           ))
         }
+
+        <Modal
+          show={this.state.showAlert}
+          closeCallback={this._hideAlertModal}
+          actionCallback={this._removeToDoElement}
+          labels={labels}
+          actions={{
+            showCancel: true,
+            showConfirm: true
+          }}
+        >
+          {alertModalContent}
+        </Modal>
       </div>
     );
   }

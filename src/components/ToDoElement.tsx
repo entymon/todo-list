@@ -13,13 +13,18 @@ export interface ToDoElementInterface {
   description: string;
   date: moment.Moment
 }
+export interface ToDoElementPropsInterface {
+  data: ToDoElementInterface,
+  removeCallback: any,
+  editCallback: any
+}
 
 export interface ToDoElementStatesInterface {
   showMoreLess: boolean;
   activeDescCover: boolean;
 }
 
-export default class ToDoElement extends React.Component<ToDoElementInterface, ToDoElementStatesInterface> {
+export default class ToDoElement extends React.Component<ToDoElementPropsInterface, ToDoElementStatesInterface> {
 
   state: ToDoElementStatesInterface = {
     showMoreLess: false,
@@ -33,12 +38,8 @@ export default class ToDoElement extends React.Component<ToDoElementInterface, T
   };
 
   componentDidMount() {
-    const desciptionContentHeight = document.getElementById(`todo-description-${this.props.id}`).offsetHeight;
-    console.log(desciptionContentHeight, 'desciptionContentHeight');
+    const desciptionContentHeight = document.getElementById(`todo-description-${this.props.data.id}`).offsetHeight;
     if (desciptionContentHeight < 200) {
-
-
-      console.log('teweerwe');
       this.setState({
         activeDescCover: false
       })
@@ -47,27 +48,25 @@ export default class ToDoElement extends React.Component<ToDoElementInterface, T
 
   render() {
 
-    console.log(this.state, 'state ;ocal');
-
     const showMoreLess = this.state.activeDescCover ? (this.state.showMoreLess ? 'less' : 'more ...') : '';
     const todoDescriptionCoverClass = this.state.activeDescCover ? (this.state.showMoreLess ? '' : 'todo-short-description') : '';
 
     return (
-      <div className="content">
+      <div id={`todo-${this.props.data.id}`} className="content">
         <div className="todo-element">
 
           <div className="todo-content">
             <div className="todo-content__header">
               <div>
-                {this.props.id} # {this.props.name}
+                {this.props.data.id} # {this.props.data.name}
               </div>
               <div>
-                {this.props.date.format(DATE_FORMAT)}
+                {this.props.data.date.format(DATE_FORMAT)}
               </div>
             </div>
             <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
-              <div id={`todo-description-${this.props.id}`}>
-                {this.props.description}
+              <div id={`todo-description-${this.props.data.id}`}>
+                {this.props.data.description}
               </div>
               <div className="todo-short-description__cover" />
             </div>
@@ -80,7 +79,7 @@ export default class ToDoElement extends React.Component<ToDoElementInterface, T
             <div onClick={this._toggleMoreLess}>
               <span>{showMoreLess}</span>
             </div>
-            <div>
+            <div onClick={() => this.props.removeCallback(this.props.data.id)}>
               <img src={removeIcon} alt="todo remove"/>
             </div>
           </div>

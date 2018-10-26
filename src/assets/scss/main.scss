@@ -3,6 +3,7 @@
 @import "config/screenSize";
 
 @import "mixins";
+@import "animations";
 
 @import "parts/wrapper";
 @import "parts/button";
@@ -24,6 +25,7 @@ body {
   margin: 0;
   font-family: $mainFont;
   font-size: $fontDefault;
+  background-color: $backgroundPageColor;
 }
 
 input,
