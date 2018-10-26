@@ -17,9 +17,27 @@ export interface ToDoElementPropsInterface {
   // todo: ToDoInterface
 }
 
-export default class ToDoElement extends React.Component<ToDoElementPropsInterface, {}> {
+export interface ToDoElementStatesInterface {
+  showMoreLess: boolean;
+}
+
+export default class ToDoElement extends React.Component<ToDoElementPropsInterface, ToDoElementStatesInterface> {
+
+  state = {
+    showMoreLess: false,
+  };
+
+  _toggleMoreLess = () => {
+    this.setState({
+      showMoreLess: !this.state.showMoreLess
+    });
+  };
 
   render() {
+
+    const showMoreLess = this.state.showMoreLess ? 'less' : 'more ...';
+    const todoDescriptionCoverClass = this.state.showMoreLess ? '' : 'todo-short-description';
+
     return (
       <div className="content">
         <div className="todo-element">
@@ -33,7 +51,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
                 23 Nov 2018
               </div>
             </div>
-            <div className="todo-content__description todo-short-description">
+            <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
@@ -46,8 +64,8 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
             <div>
               <img src={editIcon} alt="todo edit"/>
             </div>
-            <div>
-              <span>more ...</span>
+            <div onClick={this._toggleMoreLess}>
+              <span>{showMoreLess}</span>
             </div>
             <div>
               <img src={removeIcon} alt="todo remove"/>
