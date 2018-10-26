@@ -79,6 +79,9 @@ textarea.text-area {
   padding: 5px;
   resize: none;
 }
+textarea.text-area.edit-form {
+  width: calc(100% - 12px);
+}
 
 button.submit-button {
   border: 0;

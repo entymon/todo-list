@@ -89,8 +89,8 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     const filteredList = this.props.todoList.filter(element =>
       element.id !== data.id
     );
-    filteredList.concat(data);
-    this.props.dispatch(updateToDo(filteredList));
+    const updateList = filteredList.concat(data);
+    this.props.dispatch(updateToDo(updateList));
   };
 
   componentDidMount() {

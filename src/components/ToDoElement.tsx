@@ -1,4 +1,5 @@
 import React from 'react';
+import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {DATE_FORMAT} from "../constants/Constants";
 import Modal, {ModalLabelsInterface} from "./Modal";
@@ -28,7 +29,7 @@ export interface ToDoElementStatesInterface {
   editMode: boolean;
   showConfirmFlag: boolean;
 
-  id: string;
+  id: number;
   name: string;
   description: string;
   date: moment.Moment;
@@ -43,7 +44,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     editMode: false,
     showConfirmFlag: false,
 
-    id: '',
+    id: 0,
     name: '',
     description: '',
     date: moment(),
@@ -61,10 +62,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
 
   _editMode = () => {
     this.setState({
-      editMode: true,
-      name: this.props.data.name,
-      description: this.props.data.description,
-      date: this.props.data.date,
+      editMode: true
     })
   };
 
@@ -78,9 +76,32 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
   };
 
   _showConfirmModal = () => {
-    this.setState({
-      showConfirmFlag: true
-    })
+    const errors = ToDoService.validForm({
+      name: this.state.name,
+      description: this.state.description,
+      date: this.state.date,
+    });
+
+    if (ToDoService.formValid) {
+
+      // clear form
+      this.setState({
+        errors: {
+          name: false,
+          description: false,
+        },
+        showConfirmFlag: true
+      });
+
+    } else {
+
+      // send form errors
+      this.setState({
+        showConfirmFlag: false,
+        errors
+      })
+    }
+
   };
 
   _hideConfirmModal = () => {
@@ -90,43 +111,36 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
   };
 
   _updateToDoElement = () => {
-    event.preventDefault();
-    const errors = ToDoService.validForm({
+    // return data
+    this.props.editCallback({
+      id: this.state.id,
       name: this.state.name,
       description: this.state.description,
       date: this.state.date,
     });
 
-    if (ToDoService.formValid) {
-      // clear form
-      this.setState({
-        name: '',
-        description: '',
-        date: moment(),
-        errors: {
-          name: false,
-          description: false
-        }
-      });
+    this.setState({
+      editMode: false,
+      showConfirmFlag: false
+    })
+  };
 
-      // show confirm modal
-      this._showConfirmModal();
+  _handleChangeDate = (date: moment.Moment) => {
+    this.setState({
+      date: date
+    })
+  };
 
-      // return data
-      this.props.editCallback({
-        id: this.props.data.id,
-        name: this.state.name,
-        description: this.state.description,
-        date: this.state.date,
-      });
+  _handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      name: event.target.value
+    })
+  };
 
-    } else {
-
-      // send form errors
-      this.setState({
-        errors
-      })
-    }
+  _handleChangeDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.setState({
+      description: event.target.value
+    })
   };
 
   componentDidMount() {
@@ -134,7 +148,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     if (descriptionContentHeight < 200) {
       this.setState({
         activeDescCover: false,
-        id: `${this.props.data.id}`,
+        id: this.props.data.id,
         name: this.props.data.name,
         description: this.props.data.description,
         date: this.props.data.date,
@@ -161,7 +175,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
 
     return (
       <div id={`todo-${this.props.data.id}`} className="content">
-        { !this.state.editMode && (
+        {!this.state.editMode && (
           <div className="todo-element">
             <div className="todo-content">
               <div className="todo-content__header">
@@ -193,20 +207,38 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
           </div>
         )}
 
-        { this.state.editMode && (
+        {this.state.editMode && (
           <div className="todo-element">
             <div className="todo-content">
               <div className="todo-content__header">
                 <div>
-                  {this.props.data.id} # {this.props.data.name}
+                  {this.state.id} # <input
+                  className="input"
+                  id="todo-name"
+                  name="todo-name"
+                  value={this.state.name}
+                  onChange={this._handleChangeName}
+                  placeholder="ToDo title"
+                />
                 </div>
                 <div>
-                  {this.props.data.date.format(DATE_FORMAT)}
+                  <DatePicker
+                    selected={this.state.date}
+                    onChange={this._handleChangeDate}
+                    dateFormat={DATE_FORMAT}
+                  />
                 </div>
               </div>
               <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
                 <div id={`todo-description-${this.props.data.id}`}>
-                  {this.props.data.description}
+                  <textarea
+                    className="text-area edit-form"
+                    placeholder="ToDo description"
+                    cols={30}
+                    rows={5}
+                    value={this.state.description}
+                    onChange={this._handleChangeDescription}
+                  />
                 </div>
                 <div className="todo-short-description__cover"/>
               </div>
