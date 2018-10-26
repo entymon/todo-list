@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {DATE_FORMAT} from "../constants/Constants";
 import Modal, {ModalLabelsInterface} from "./Modal";
+import ToDoService from "../services/ToDoService";
 
 export interface CreateFormToDoResponseInterface {
   name: string;
@@ -72,22 +73,37 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
   };
 
   _handleSubmitForm = (event: React.ChangeEvent<HTMLFormElement>) => {
-    this._showConfirmModal();
-
-    this.setState({
-      name: '',
-      description: '',
-      date: moment(),
-    });
-
-    // add logic to save ToDo
-    // to check if everythign is valid
-
-    this.props.callback({
+    const errors = ToDoService.validForm({
       name: this.state.name,
       description: this.state.description,
       date: this.state.date,
-    }, true);
+    });
+
+    if (ToDoService.formValid) {
+      // clear form
+      this.setState({
+        name: '',
+        description: '',
+        date: moment(),
+      });
+
+      // show confirm modal
+      this._showConfirmModal();
+
+      // return data
+      this.props.callback({
+        name: this.state.name,
+        description: this.state.description,
+        date: this.state.date,
+      }, true);
+
+    } else {
+
+      // send form errors
+      this.setState({
+        errors
+      })
+    }
     event.preventDefault();
   };
 
@@ -114,7 +130,7 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
               <label htmlFor="todo-name">
                 <div className="input-label">
                   <p className="title">Name</p>
-                  <span className="error-note">Error message</span>
+                  {this.state.errors.name && <span className="error-note">Name is required</span>}
                 </div>
                 <input
                   className="input"
@@ -149,7 +165,7 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
               <label>
                 <div className="textarea-label">
                   <p className="title">Description</p>
-                  <span className="error-note">Error message</span>
+                  {this.state.errors.description && <span className="error-note">Description is required</span>}
                 </div>
                 <textarea
                   className="text-area"

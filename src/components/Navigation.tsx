@@ -114,9 +114,9 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
   }
 
   _createToDoFormUpdate = (model: CreateFormToDoResponseInterface | {}, confirm: boolean) => {
-    // if (confirm) {
-    //
-    // }
+    if (confirm) {
+
+    }
     this.setState({
       toggleAddNewToDo: false
     })
