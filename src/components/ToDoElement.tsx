@@ -29,6 +29,8 @@ export interface ToDoElementStatesInterface {
   editMode: boolean;
   showConfirmFlag: boolean;
 
+  previousState: any;
+
   id: number;
   name: string;
   description: string;
@@ -43,6 +45,8 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     activeDescCover: true,
     editMode: false,
     showConfirmFlag: false,
+
+    previousState: {}, // need for update
 
     id: 0,
     name: '',
@@ -60,18 +64,33 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     });
   };
 
+  /**
+   * Open edit mode and save current state
+   * @private
+   */
   _editMode = () => {
     this.setState({
-      editMode: true
+      editMode: true,
+      previousState: {
+        id: this.state.id,
+        name: this.state.name,
+        description: this.state.description,
+        date: this.state.date,
+      }
     })
   };
 
+  /**
+   * Open view mode and get previous state
+   * @private
+   */
   _viewMode = () => {
     this.setState({
       editMode: false,
-      name: '',
-      description: '',
-      date: moment(),
+      id: this.state.previousState.id,
+      name: this.state.previousState.name,
+      description: this.state.previousState.description,
+      date: this.state.previousState.date,
     })
   };
 
@@ -180,15 +199,15 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
             <div className="todo-content">
               <div className="todo-content__header">
                 <div>
-                  {this.props.data.id} # {this.props.data.name}
+                  {this.props.data.id} # {this.state.name}
                 </div>
                 <div>
-                  {this.props.data.date.format(DATE_FORMAT)}
+                  {this.state.date.format(DATE_FORMAT)}
                 </div>
               </div>
               <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
                 <div id={`todo-description-${this.props.data.id}`}>
-                  {this.props.data.description}
+                  {this.state.description}
                 </div>
                 <div className="todo-short-description__cover"/>
               </div>
@@ -212,7 +231,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
             <div className="todo-content">
               <div className="todo-content__header">
                 <div>
-                  {this.state.id} # <input
+                  {this.props.data.id} # <input
                   className="input"
                   id="todo-name"
                   name="todo-name"
