@@ -2,19 +2,55 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {DATE_FORMAT} from "../constants/Constants";
+import Modal, {ModalLabelsInterface} from "./Modal";
 
-interface CreateFormStatesInterface {
+export interface CreateFormToDoResponseInterface {
   name: string;
   description: string;
   date: moment.Moment;
 }
 
-export default class CreateForm extends React.Component<{}, CreateFormStatesInterface> {
+export interface CreateToDoFormErrorInterface {
+  name: boolean,
+  description: boolean
+}
+
+export interface CreateToDoFormStatesInterface {
+  name: string;
+  description: string;
+  date: moment.Moment;
+  showConfirmModal: boolean;
+  errors: CreateToDoFormErrorInterface
+}
+
+export interface CreateToDoFormPropsInterface {
+  callback: any;
+}
+
+export default class CreateForm extends React.Component<CreateToDoFormPropsInterface, CreateToDoFormStatesInterface> {
 
   state = {
     name: '',
     description: '',
-    date: moment()
+    date: moment(),
+    showConfirmModal: false,
+
+    errors: {
+      name: false,
+      description: false
+    }
+  };
+
+  _showConfirmModal = () => {
+    this.setState({
+      showConfirmModal: true
+    });
+  };
+
+  _hideConfirmModal = () => {
+    this.setState({
+      showConfirmModal: false
+    });
   };
 
   _handleChangeDate = (date: moment.Moment) => {
@@ -36,10 +72,39 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
   };
 
   _handleSubmitForm = (event: React.ChangeEvent<HTMLFormElement>) => {
+    this._showConfirmModal();
+
+    this.setState({
+      name: '',
+      description: '',
+      date: moment(),
+    });
+
+    // add logic to save ToDo
+    // to check if everythign is valid
+
+    this.props.callback({
+      name: this.state.name,
+      description: this.state.description,
+      date: this.state.date,
+    }, true);
     event.preventDefault();
   };
 
   render() {
+
+    const labels: ModalLabelsInterface = {
+      cancel: '',
+      confirm: 'OK',
+    };
+
+    const modalContent = (
+      <div>
+        <h2>ToDo Create</h2>
+        <p>Task was successfully created.</p>
+      </div>
+    );
+
     return (
       <div className="create-form">
         <form onSubmit={this._handleSubmitForm}>
@@ -104,6 +169,19 @@ export default class CreateForm extends React.Component<{}, CreateFormStatesInte
             </button>
           </div>
         </form>
+
+        <Modal
+          show={this.state.showConfirmModal}
+          closeCallback={this._hideConfirmModal}
+          actionCallback={this._hideConfirmModal}
+          labels={labels}
+          actions={{
+            showCancel: false,
+            showConfirm: true
+          }}
+        >
+          {modalContent}
+        </Modal>
       </div>
     );
   }

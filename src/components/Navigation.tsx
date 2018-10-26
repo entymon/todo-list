@@ -4,7 +4,7 @@ import Button from "./parts/Button";
 import ListIcon from "./parts/ListIcon";
 import PlusIcon from "./parts/PlusIcon";
 import ListOfRecords from "./ListOfRecords";
-import CreateForm from "./CreateForm";
+import CreateForm, {CreateFormToDoResponseInterface} from "./CreateForm";
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -22,14 +22,18 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
   };
 
   _toggleListOfRecords = () => {
+
+
     this.setState({
-      toggleListOfRecords: !this.state.toggleListOfRecords
+      toggleListOfRecords: !this.state.toggleListOfRecords,
+      toggleAddNewToDo: false
     })
   };
 
   _toggleCreateToDo = () => {
     this.setState({
-      toggleAddNewToDo: !this.state.toggleAddNewToDo
+      toggleAddNewToDo: !this.state.toggleAddNewToDo,
+      toggleListOfRecords: false
     })
   };
 
@@ -80,28 +84,42 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
           </div>
         </div>
 
-        <div
-          className="hidden-content"
-          style={{
-            maxHeight: this.state.toggleListOfRecords ? '500px' : '0',
-          }}
-        >
-          <div className="hidden-content__inner">
-            <ListOfRecords/>
+        {!this.state.toggleAddNewToDo && (
+          <div
+            className="hidden-content"
+            style={{
+              maxHeight: this.state.toggleListOfRecords ? '500px' : '0',
+            }}
+          >
+            <div className="hidden-content__inner">
+              <ListOfRecords/>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div
-          className="hidden-content"
-          style={{
-            maxHeight: this.state.toggleAddNewToDo ? '500px' : '0',
-          }}
-        >
-          <div className="hidden-content__inner">
-            <CreateForm/>
+        {!this.state.toggleListOfRecords && (
+          <div
+            className="hidden-content"
+            style={{
+              maxHeight: this.state.toggleAddNewToDo ? '500px' : '0',
+            }}
+          >
+            <div className="hidden-content__inner">
+              <CreateForm callback={this._createToDoFormUpdate}/>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
+  }
+
+  _createToDoFormUpdate = (model: CreateFormToDoResponseInterface | {}, confirm: boolean) => {
+    // if (confirm) {
+    //
+    // }
+    this.setState({
+      toggleAddNewToDo: false
+    })
+
   }
 }
