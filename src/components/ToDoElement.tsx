@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {triggerAsyncId} from "async_hooks";
+import {DATE_FORMAT} from "../constants/Constants";
 
 const editIcon = require('../assets/images/pencil-icon.svg') as string;
 const removeIcon = require('../assets/images/trash.svg') as string;
@@ -13,18 +14,16 @@ export interface ToDoElementInterface {
   date: moment.Moment
 }
 
-export interface ToDoElementPropsInterface {
-  // todo: ToDoInterface
-}
-
 export interface ToDoElementStatesInterface {
   showMoreLess: boolean;
+  activeDescCover: boolean;
 }
 
-export default class ToDoElement extends React.Component<ToDoElementPropsInterface, ToDoElementStatesInterface> {
+export default class ToDoElement extends React.Component<ToDoElementInterface, ToDoElementStatesInterface> {
 
-  state = {
+  state: ToDoElementStatesInterface = {
     showMoreLess: false,
+    activeDescCover: true
   };
 
   _toggleMoreLess = () => {
@@ -33,10 +32,25 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
     });
   };
 
+  componentDidMount() {
+    const desciptionContentHeight = document.getElementById(`todo-description-${this.props.id}`).offsetHeight;
+    console.log(desciptionContentHeight, 'desciptionContentHeight');
+    if (desciptionContentHeight < 200) {
+
+
+      console.log('teweerwe');
+      this.setState({
+        activeDescCover: false
+      })
+    }
+  };
+
   render() {
 
-    const showMoreLess = this.state.showMoreLess ? 'less' : 'more ...';
-    const todoDescriptionCoverClass = this.state.showMoreLess ? '' : 'todo-short-description';
+    console.log(this.state, 'state ;ocal');
+
+    const showMoreLess = this.state.activeDescCover ? (this.state.showMoreLess ? 'less' : 'more ...') : '';
+    const todoDescriptionCoverClass = this.state.activeDescCover ? (this.state.showMoreLess ? '' : 'todo-short-description') : '';
 
     return (
       <div className="content">
@@ -45,17 +59,16 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
           <div className="todo-content">
             <div className="todo-content__header">
               <div>
-                12 # Name of Todo
+                {this.props.id} # {this.props.name}
               </div>
               <div>
-                23 Nov 2018
+                {this.props.date.format(DATE_FORMAT)}
               </div>
             </div>
             <div className={`todo-content__description ${todoDescriptionCoverClass}`}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidi
+              <div id={`todo-description-${this.props.id}`}>
+                {this.props.description}
+              </div>
               <div className="todo-short-description__cover" />
             </div>
           </div>

@@ -46,28 +46,18 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, {}> {
     return (
       <div className="page">
 
-        <button onClick={this.showModal}>TEST MODAL</button>
-
         <Navigation />
 
         {
           this.props.todoList.map((element: ToDoElementInterface) => (
-            <ToDoElement/>
+            <ToDoElement
+              key={`todo-element-${element.id}`}
+              id={element.id}
+              name={element.name}
+              description={element.description}
+              date={element.date}/>
           ))
         }
-
-        <Modal
-          show={this.state.showSuccess}
-          closeCallback={this.hideModal}
-          actionCallback={this.hideModal}
-          labels={labels}
-          actions={{
-            showCancel: false,
-            showConfirm: true
-          }}
-        >
-          {modalContent}
-        </Modal>
       </div>
     );
   }

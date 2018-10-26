@@ -31,7 +31,9 @@ export default class Navigation extends React.Component<NavigationPropsInterface
     recorderStatus: false,
 
     toggleListOfRecords: false,
-    toggleAddNewToDo: true, // TODO: remove after dev
+
+    // Open add form if list of ToDo is empty
+    toggleAddNewToDo: this.props.todoList.length === 0,
   };
 
   _toggleListOfRecords = () => {
