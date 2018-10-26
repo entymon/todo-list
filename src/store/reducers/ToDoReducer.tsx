@@ -3,12 +3,17 @@ import {
   REMOVE_TO_DO,
   EDIT_TO_DO
 } from '../actions/ToDoActions';
+import {ToDoElementInterface} from "../../components/ToDoElement";
 
-const initialState = {
-  todoList: {}
+export interface ToDoReducerStateInterface {
+  todoList: Array<ToDoElementInterface>
+}
+
+const initialState: ToDoReducerStateInterface = {
+  todoList: []
 };
 
-export default (state = initialState, action: any) => {
+export default (state: ToDoReducerStateInterface = initialState, action: any) => {
 
   switch (action.type) {
 

@@ -1,9 +1,19 @@
 import React from 'react';
 import Navigation from "../components/Navigation";
-import ToDoElement from "../components/ToDoElement";
+import ToDoElement, {ToDoElementInterface} from "../components/ToDoElement";
 import Modal, {ModalLabelsInterface} from "../components/Modal";
+import {connect} from "react-redux";
 
-export default class ToDo extends React.Component {
+export interface ToDoPagePropsInterface {
+  todoList?: Array<ToDoElementInterface>
+}
+
+@(connect((store: any) => {
+  return {
+    todoList: store.todoReducer.todoList
+  }
+}) as any)
+export default class ToDo extends React.Component<ToDoPagePropsInterface, {}> {
 
   state = {
     showSuccess: false,
@@ -39,8 +49,13 @@ export default class ToDo extends React.Component {
         <button onClick={this.showModal}>TEST MODAL</button>
 
         <Navigation />
-        <ToDoElement/>
-        
+
+        {
+          this.props.todoList.map((element: ToDoElementInterface) => (
+            <ToDoElement/>
+          ))
+        }
+
         <Modal
           show={this.state.showSuccess}
           closeCallback={this.hideModal}

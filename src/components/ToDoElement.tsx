@@ -6,7 +6,7 @@ const editIcon = require('../assets/images/pencil-icon.svg') as string;
 const removeIcon = require('../assets/images/trash.svg') as string;
 const saveIcon = require('../assets/images/save-icon.svg') as string;
 
-export interface ToDoInterface {
+export interface ToDoElementInterface {
   id: number;
   name: string;
   description: string;

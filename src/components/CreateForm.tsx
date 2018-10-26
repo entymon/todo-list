@@ -73,6 +73,7 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
   };
 
   _handleSubmitForm = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const errors = ToDoService.validForm({
       name: this.state.name,
       description: this.state.description,
@@ -85,6 +86,10 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
         name: '',
         description: '',
         date: moment(),
+        errors: {
+          name: false,
+          description: false
+        }
       });
 
       // show confirm modal
@@ -104,7 +109,6 @@ export default class CreateForm extends React.Component<CreateToDoFormPropsInter
         errors
       })
     }
-    event.preventDefault();
   };
 
   render() {

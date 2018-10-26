@@ -5,6 +5,9 @@ import ListIcon from "./parts/ListIcon";
 import PlusIcon from "./parts/PlusIcon";
 import ListOfRecords from "./ListOfRecords";
 import CreateForm, {CreateFormToDoResponseInterface} from "./CreateForm";
+import {connect} from "react-redux";
+import {ToDoElementInterface} from "./ToDoElement";
+import {addToDo} from "../store/actions/ToDoActions";
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -12,7 +15,17 @@ export interface NavigationStatesInterface {
   toggleAddNewToDo: boolean
 }
 
-export default class Navigation extends React.Component<{}, NavigationStatesInterface> {
+export interface NavigationPropsInterface {
+  todoList?: Array<ToDoElementInterface>;
+  dispatch?: any;
+}
+
+@(connect((store: any) => {
+  return {
+    todoList: store.todoReducer.todoList
+  }
+}) as any)
+export default class Navigation extends React.Component<NavigationPropsInterface, NavigationStatesInterface> {
 
   state = {
     recorderStatus: false,
@@ -56,6 +69,7 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
   };
 
   render() {
+
     return (
       <div className="content">
 
@@ -113,10 +127,19 @@ export default class Navigation extends React.Component<{}, NavigationStatesInte
     );
   }
 
-  _createToDoFormUpdate = (model: CreateFormToDoResponseInterface | {}, confirm: boolean) => {
+  _createToDoFormUpdate = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
     if (confirm) {
+      const toDo: ToDoElementInterface = {
+        id: this.props.todoList.length + 1,
+        name: model.name,
+        description: model.description,
+        date: model.date
+      };
 
+      const updateToDoList = this.props.todoList.concat(toDo);
+      this.props.dispatch(addToDo(updateToDoList));
     }
+
     this.setState({
       toggleAddNewToDo: false
     })
