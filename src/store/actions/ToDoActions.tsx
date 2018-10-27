@@ -1,18 +1,6 @@
-export const ADD_TO_DO = 'ADD_TO_DO';
-export const REMOVE_TO_DO = 'REMOVE_TO_DO';
-export const EDIT_TO_DO = 'EDIT_TO_DO';
+export const UPDATE_TO_DO_LIST = 'UPDATE_TO_DO_LIST';
 
 export const updateToDo = (toDoList: Array<any>) => ({
-  type: ADD_TO_DO,
+  type: UPDATE_TO_DO_LIST,
   payload: toDoList
-});
-
-export const removeToDo = (toDo: any) => ({
-  type: REMOVE_TO_DO,
-  payload: toDo
-});
-
-export const editToDo = (toDo: any) => ({
-  type: EDIT_TO_DO,
-  payload: toDo
 });

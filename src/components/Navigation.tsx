@@ -9,6 +9,11 @@ import {connect} from "react-redux";
 import {ToDoElementInterface} from "./ToDoElement";
 import {updateToDo} from "../store/actions/ToDoActions";
 import ToDoService from "../services/ToDoService";
+import RecorderService from "../services/RecorderService";
+import {setKeyForRecordSession} from "../store/actions/RecorderActions";
+
+const recorder = new RecorderService();
+const recordStorage = recorder.getSessionStorage();
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -17,12 +22,14 @@ export interface NavigationStatesInterface {
 }
 
 export interface NavigationPropsInterface {
+  store?: any;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
 }
 
 @(connect((store: any) => {
   return {
+    store,
     todoList: store.todoReducer.todoList
   }
 }) as any)
@@ -53,7 +60,20 @@ export default class Navigation extends React.Component<NavigationPropsInterface
     })
   };
 
+  /**
+   * Open new record session
+   * @private
+   */
   _changeRecordingStatus = () => {
+
+    if (this.state.recorderStatus) { // stop recording
+
+    } else { // start recording
+      const key = ToDoService.getShortUuid();
+      this.props.dispatch(setKeyForRecordSession(key));
+      recorder.openSession(key, this.props.store);
+    }
+
     this.setState({
       recorderStatus: !this.state.recorderStatus
     });

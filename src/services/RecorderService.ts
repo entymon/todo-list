@@ -1,5 +1,4 @@
 import {TODO_RECORD_STORAGE} from "../constants/Constants";
-import ToDoService from "./ToDoService";
 
 export interface SessionStorageInterface {
   [key: string] : Array<any>;
@@ -13,7 +12,7 @@ export default class RecorderService {
   initSessionStorage = () => {
     Promise.resolve(localStorage.getItem(TODO_RECORD_STORAGE)).then(storage => {
       if (!storage) {
-        localStorage.setItem(TODO_RECORD_STORAGE, '');
+        localStorage.setItem(TODO_RECORD_STORAGE, '{}');
       }
     })
   };
@@ -23,7 +22,9 @@ export default class RecorderService {
    * @returns {any}
    */
   getSessionStorage = () => {
-    return JSON.parse(localStorage.getItem(TODO_RECORD_STORAGE));
+    if (localStorage.getItem(TODO_RECORD_STORAGE)) {
+      return JSON.parse(localStorage.getItem(TODO_RECORD_STORAGE));
+    }
   };
 
   /**
@@ -36,10 +37,10 @@ export default class RecorderService {
 
   /**
    * Opens new session in Storage
+   * @param {string} key
    * @param store
    */
-  openSession = (store: any): void => {
-    const key = ToDoService.getShortUuid();
+  openSession = (key: string, store: any): void => {
     Promise.resolve(this.getSessionStorage())
       .then((storage: SessionStorageInterface) => {
 
@@ -48,7 +49,6 @@ export default class RecorderService {
 
       this.updateSessionStorage(storage);
     });
-    return key;
   };
 
   /**

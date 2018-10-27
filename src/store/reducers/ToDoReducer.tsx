@@ -1,7 +1,5 @@
 import {
-  ADD_TO_DO,
-  REMOVE_TO_DO,
-  EDIT_TO_DO
+  UPDATE_TO_DO_LIST,
 } from '../actions/ToDoActions';
 import {ToDoElementInterface} from "../../components/ToDoElement";
 
@@ -17,19 +15,7 @@ export default (state: ToDoReducerStateInterface = initialState, action: any) =>
 
   switch (action.type) {
 
-    case ADD_TO_DO:
-      return {
-        ...state,
-        todoList: action.payload
-      };
-
-    case REMOVE_TO_DO:
-      return {
-        ...state,
-        todoList: action.payload
-      };
-
-    case EDIT_TO_DO:
+    case UPDATE_TO_DO_LIST:
       return {
         ...state,
         todoList: action.payload
