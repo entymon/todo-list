@@ -81,9 +81,6 @@ export default class RecorderService {
    */
   updateSession = (key: string, snapshot: SnapshotInterface) => {
     if (key !== RECORD_SESSION_NOT_SET) {
-
-      console.log(key, 'key');
-
       Promise.resolve(this.getSessionStorage())
         .then((storage: SessionStorageInterface) => {
           storage[key].push(snapshot);
@@ -94,14 +91,17 @@ export default class RecorderService {
 
   /**
    * Remove session from Storage
+   *
    * @param {string} key
+   * @param callbackSuccess
    */
-  removeSession = (key: string) => {
+  removeSession = (key: string, callbackSuccess: any) => {
     if (key !== RECORD_SESSION_NOT_SET) {
       Promise.resolve(this.getSessionStorage())
         .then((storage: SessionStorageInterface) => {
           delete(storage[key]);
           this.updateSessionStorage(storage);
+          callbackSuccess();
         })
     }
   };

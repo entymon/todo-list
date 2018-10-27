@@ -19,6 +19,7 @@ export interface NavigationStatesInterface {
   recorderStatus: boolean,
   toggleListOfRecords: boolean,
   toggleAddNewToDo: boolean
+  storage: any;
 }
 
 export interface NavigationPropsInterface {
@@ -42,13 +43,13 @@ export default class Navigation extends React.Component<NavigationPropsInterface
   state = {
     recorderStatus: false,
     toggleListOfRecords: false,
+    storage: {},
 
     // Open add form if list of ToDo is empty
     toggleAddNewToDo: this.props.todoList.length === 0,
   };
 
   _toggleListOfRecords = () => {
-
 
     this.setState({
       toggleListOfRecords: !this.state.toggleListOfRecords,
@@ -109,7 +110,6 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   /**
    * Add new todo element
-   *
    */
   _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
     if (confirm) {
@@ -130,6 +130,16 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   };
 
+  _updateStorage = () => {
+    this.forceUpdate();
+  };
+
+  componentDidMount () {
+    this.setState({
+      storage: recorder.getSessionStorage()
+    })
+  }
+
   shouldComponentUpdate(newProps: any, newState: any) {
     if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
       if ([ACTIONS.CREATE_TODO].includes(newProps.actionName))
@@ -142,9 +152,8 @@ export default class Navigation extends React.Component<NavigationPropsInterface
   };
 
   render() {
-
     const storage = recorder.getSessionStorage();
-    const disableList = Object.keys(storage).length === 0;
+    const disableList = Object.keys(this.state.storage).length === 0;
 
     return (
       <div className="content">
@@ -176,7 +185,10 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
         {/* TODO: Remove after test */}
         <div className="hidden-content__inner">
-          <ListOfRecords sessions={storage}/>
+          <ListOfRecords
+            sessions={storage}
+            callbackStorageUpdate={this._updateStorage}
+          />
         </div>
 
         {/* Show only if add new is close and list of storage elements is not empty */}
@@ -188,7 +200,10 @@ export default class Navigation extends React.Component<NavigationPropsInterface
             }}
           >
             <div className="hidden-content__inner">
-              <ListOfRecords sessions={storage}/>
+              <ListOfRecords
+                sessions={storage}
+                callbackStorageUpdate={this._updateStorage}
+              />
             </div>
           </div>
         )}

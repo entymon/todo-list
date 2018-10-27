@@ -1,5 +1,6 @@
 import React from 'react';
 import {SnapshotInterface} from "../services/RecorderService";
+import Modal from "./Modal";
 const removeIcon = require('../assets/images/trash.svg') as string;
 
 export interface SingleRecordPropsInterface {
@@ -10,12 +11,14 @@ export interface SingleRecordPropsInterface {
 
 export interface SingleRecordStatsInterface {
   played: boolean;
+  showAlert: boolean;
 }
 
 export default class SingleRecord extends React.Component<SingleRecordPropsInterface, SingleRecordStatsInterface> {
 
   state = {
-    played: false
+    played: false,
+    showAlert: false
   };
 
   _startPlaying = () => {
@@ -30,10 +33,29 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
     })
   };
 
+  _removeHandler = () => {
+    this.setState({
+      showAlert: true
+    })
+  };
+
+  _hideAlertModal = () => {
+    this.setState({
+      showAlert: false
+    })
+  };
+
   render() {
 
+    const alertModalContent = (
+      <div>
+        <h2>Alert</h2>
+        <p>Do you want to remove this card?</p>
+      </div>
+    );
+
     return (
-      <div className="single-record">
+      <div id={`recording-${this.props.snapshotId}`} className="single-record">
         <div className="single-record__header">
           <div className="title">Session ID: {this.props.snapshotId}</div>
           <div className="controls">
@@ -50,7 +72,7 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
               onClick={this._pausePlaying}
             />)}
 
-            <div className="control-icon trash-icon" onClick={() => this.props.removeCallback(this.props.snapshotId)}>
+            <div className="control-icon trash-icon" onClick={this._removeHandler}>
               <img src={removeIcon} alt="record remove"/>
             </div>
 
@@ -65,6 +87,25 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
               ))
           }
         </div>
+
+        <Modal
+          show={this.state.showAlert}
+          closeCallback={this._hideAlertModal}
+          actionCallback={() => {
+            this.setState({ showAlert: false });
+            this.props.removeCallback(this.props.snapshotId);
+          }}
+          labels={{
+            cancel: 'No',
+            confirm: 'Yes'
+          }}
+          actions={{
+            showCancel: true,
+            showConfirm: true
+          }}
+        >
+          {alertModalContent}
+        </Modal>
       </div>
     );
   }

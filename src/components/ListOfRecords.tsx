@@ -1,15 +1,36 @@
 import React from 'react';
-import {SessionStorageInterface} from "../services/RecorderService";
+import {default as RecorderService, SessionStorageInterface} from "../services/RecorderService";
 import SingleRecord from "./SingleRecord";
 
+const recorder = new RecorderService();
+
 export interface ListOfRecordsPropsInterface {
-  sessions: SessionStorageInterface
+  sessions: SessionStorageInterface,
+  callbackStorageUpdate: any;
 }
 
 export default class ListOfRecords extends React.Component<ListOfRecordsPropsInterface, {}> {
 
-  _removeRecordedSession = (snapshotId: string) => {
+  /**
+   * Animation for removed element
+   * @param {number} id
+   * @private
+   */
+  _fadingDone = (id: string) => {
+    recorder.removeSession(id, () => {
+      this.props.callbackStorageUpdate();
+    });
+  };
 
+  /**
+   * Remove TODO element
+   * @private
+   */
+  _removeRecordedSession = (snapshotId: string) => {
+      const elementId = `recording-${snapshotId}`;
+      const elementDOM = document.getElementById(elementId);
+      elementDOM.addEventListener('animationend', () => this._fadingDone(snapshotId));
+      elementDOM.classList.add('fade-out');
   };
 
   /**

@@ -128,7 +128,7 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     const alertModalContent = (
       <div>
         <h2>Alert</h2>
-        <p>Are you really would like remove this card?</p>
+        <p>Do you want to remove this card?</p>
       </div>
     );
 
