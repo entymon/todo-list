@@ -1,4 +1,8 @@
 .single-record {
+  margin-top: 10px;
+  border-bottom: 1px solid $black;
+  padding: 10px 0;
+
   &__header {
     display: flex;
     flex-direction: row;
@@ -9,7 +13,66 @@
       font-weight: 700;
     }
     .controls {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
 
+      .control-icon {
+        cursor: pointer;
+        transition: opacity .2s;
+
+        &:hover {
+          opacity: .5;
+        }
+
+        &.fast-play-icon {
+          position: relative;
+          width: 28px;
+
+          &:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 14px 18px 14px 0;
+            border-color: transparent #000000 transparent transparent;
+            left: 0
+          }
+          &:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 14px 18px 14px 0;
+            border-color: transparent #000000 transparent transparent;
+            left: -12px;
+          }
+        }
+
+        &.play-icon {
+          margin: 0 10px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 14px 0 14px 18px;
+          border-color: transparent transparent transparent $black;
+        }
+        &.pause-icon {
+          margin: 0 10px;
+          width: 6px;
+          height: 27px;
+          border-left: 8px solid $black;
+          border-right: 8px solid $black;
+        }
+        &.trash-icon {
+          margin: 0 10px;
+          > img {
+            width: 28px;
+          }
+        }
+      }
     }
   }
   &__content {

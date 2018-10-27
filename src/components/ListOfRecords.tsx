@@ -8,6 +8,10 @@ export interface ListOfRecordsPropsInterface {
 
 export default class ListOfRecords extends React.Component<ListOfRecordsPropsInterface, {}> {
 
+  _removeRecordedSession = (snapshotId: string) => {
+
+  };
+
   /**
    * Render single records
    * @param {Array<string>} keys
@@ -17,7 +21,12 @@ export default class ListOfRecords extends React.Component<ListOfRecordsPropsInt
   _renderSingleRecord = (keys: Array<string>) => {
     return keys.map((sessionKey: string) => {
       const sessionContent = this.props.sessions[sessionKey];
-      return (<SingleRecord key={sessionKey} snapshotId={sessionKey} snapshots={sessionContent} />)
+      return (<SingleRecord
+        key={sessionKey}
+        snapshotId={sessionKey}
+        snapshots={sessionContent}
+        removeCallback={this._removeRecordedSession}
+      />)
     });
   };
 
