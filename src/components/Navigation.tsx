@@ -40,7 +40,6 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   state = {
     recorderStatus: false,
-
     toggleListOfRecords: false,
 
     // Open add form if list of ToDo is empty
@@ -71,7 +70,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
     if (this.state.recorderStatus) { // stop recording
       recorder.closeSession(this.props.recordSessionKey, {
-        snapshot: this.props.store,
+        storeSnapshot: this.props.store,
         status: 'close'
       });
       this.props.dispatch(setKeyForRecordSession(RECORD_SESSION_NOT_SET));
@@ -79,7 +78,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
       const key = ToDoService.getShortUuid();
       this.props.dispatch(setKeyForRecordSession(key));
       recorder.openSession(key, {
-        snapshot: this.props.store,
+        storeSnapshot: this.props.store,
         status: 'open'
       });
     }
@@ -134,7 +133,13 @@ export default class Navigation extends React.Component<NavigationPropsInterface
           </div>
         </div>
 
-        {!this.state.toggleAddNewToDo && (
+        {/* TODO: Remove after test */}
+        <div className="hidden-content__inner">
+          <ListOfRecords sessions={storage}/>
+        </div>
+
+        {/* Show only if add new is close and list of storage elements is not empty */}
+        {!this.state.toggleAddNewToDo && !disableList && (
           <div
             className="hidden-content"
             style={{
@@ -142,11 +147,12 @@ export default class Navigation extends React.Component<NavigationPropsInterface
             }}
           >
             <div className="hidden-content__inner">
-              <ListOfRecords/>
+              <ListOfRecords sessions={storage}/>
             </div>
           </div>
         )}
 
+        {/* Show only if list of record sessions close */}
         {!this.state.toggleListOfRecords && (
           <div
             className="hidden-content"

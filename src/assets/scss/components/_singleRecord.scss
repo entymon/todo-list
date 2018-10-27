@@ -1,0 +1,36 @@
+.single-record {
+  &__header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    .title {
+      font-weight: 700;
+    }
+    .controls {
+
+    }
+  }
+  &__content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .record-snapshot {
+      transition: opacity .2s;
+      cursor: pointer;
+      text-align: center;
+      color: $white;
+      flex: 0 0 80px;
+      margin: 10px;
+      padding: 10px 10px;
+      background-color: $blue;
+      font-weight: 300;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}

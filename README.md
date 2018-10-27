@@ -1,5 +1,9 @@
 Node version: v10.12.0
 
+### General 
+
+1. Application uses browser local storage, if there is something what blocks actions to local storage the recording part of application won't work.
+
 ### Setup environment
 
 1. `yarn` - install packages

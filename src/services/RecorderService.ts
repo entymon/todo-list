@@ -1,7 +1,7 @@
 import {RECORD_SESSION_NOT_SET, TODO_RECORD_STORAGE} from "../constants/Constants";
 
 export interface SnapshotInterface {
-  snapshot: any;
+  storeSnapshot: any;
   status: string;
 }
 
