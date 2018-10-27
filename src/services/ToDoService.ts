@@ -32,6 +32,6 @@ export default class ToDoService {
    */
   static getShortUuid = () => {
     const uuid = uuidv1().split('-');
-    return uuid.pop();
+    return uuid.shift();
   }
 }

@@ -69,11 +69,11 @@ export default class Navigation extends React.Component<NavigationPropsInterface
   _changeRecordingStatus = () => {
 
     if (this.state.recorderStatus) { // stop recording
+      this.props.dispatch(setKeyForRecordSession(RECORD_SESSION_NOT_SET));
       recorder.closeSession(this.props.recordSessionKey, {
         storeSnapshot: this.props.store,
         status: 'close'
       });
-      this.props.dispatch(setKeyForRecordSession(RECORD_SESSION_NOT_SET));
     } else { // start recording
       const key = ToDoService.getShortUuid();
       this.props.dispatch(setKeyForRecordSession(key));
@@ -100,7 +100,28 @@ export default class Navigation extends React.Component<NavigationPropsInterface
     );
   };
 
+  _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
+    if (confirm) {
+      const toDo: ToDoElementInterface = {
+        id: ToDoService.getShortUuid(),
+        name: model.name,
+        description: model.description,
+        date: model.date
+      };
+
+      const updateToDoList = this.props.todoList.concat(toDo);
+      this.props.dispatch(updateToDo(updateToDoList));
+    }
+
+    this.setState({
+      toggleAddNewToDo: false
+    })
+
+  };
+
   render() {
+
+    console.log(this.props.recordSessionKey, 'this.props.recordSessionKey');
 
     const storage = recorder.getSessionStorage();
     const disableList = Object.keys(storage).length === 0;
@@ -167,24 +188,5 @@ export default class Navigation extends React.Component<NavigationPropsInterface
         )}
       </div>
     );
-  }
-
-  _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
-    if (confirm) {
-      const toDo: ToDoElementInterface = {
-        id: ToDoService.getShortUuid(),
-        name: model.name,
-        description: model.description,
-        date: model.date
-      };
-
-      const updateToDoList = this.props.todoList.concat(toDo);
-      this.props.dispatch(updateToDo(updateToDoList));
-    }
-
-    this.setState({
-      toggleAddNewToDo: false
-    })
-
   }
 }

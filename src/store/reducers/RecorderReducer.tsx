@@ -1,11 +1,12 @@
 import {SET_RECORD_KEY} from "../actions/RecorderActions";
+import {RECORD_SESSION_NOT_SET} from "../../constants/Constants";
 
 export interface RecorderReducerStateInterface {
   key: string
 }
 
 const initialState: RecorderReducerStateInterface = {
-  key: ''
+  key: RECORD_SESSION_NOT_SET
 };
 
 export default (state: RecorderReducerStateInterface = initialState, action: any) => {
