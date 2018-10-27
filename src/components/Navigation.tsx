@@ -7,14 +7,13 @@ import ListOfRecords from "./ListOfRecords";
 import CreateForm, {CreateFormToDoResponseInterface} from "./CreateForm";
 import {connect} from "react-redux";
 import {ToDoElementInterface} from "./ToDoElement";
-import {updateToDo} from "../store/actions/ToDoActions";
+import {setActionName, updateToDo} from "../store/actions/ToDoActions";
 import ToDoService from "../services/ToDoService";
 import RecorderService from "../services/RecorderService";
 import {setKeyForRecordSession} from "../store/actions/RecorderActions";
-import {RECORD_SESSION_NOT_SET} from "../constants/Constants";
+import {ACTIONS, RECORD_SESSION_NOT_SET} from "../constants/Constants";
 
 const recorder = new RecorderService();
-const recordStorage = recorder.getSessionStorage();
 
 export interface NavigationStatesInterface {
   recorderStatus: boolean,
@@ -24,6 +23,7 @@ export interface NavigationStatesInterface {
 
 export interface NavigationPropsInterface {
   recordSessionKey?: string;
+  actionName?: string;
   store?: any;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
@@ -33,7 +33,8 @@ export interface NavigationPropsInterface {
   return {
     store,
     recordSessionKey: store.recorderReducer.key,
-    todoList: store.todoReducer.todoList
+    todoList: store.todoReducer.todoList,
+    actionName: store.todoReducer.actionName
   }
 }) as any)
 export default class Navigation extends React.Component<NavigationPropsInterface, NavigationStatesInterface> {
@@ -69,17 +70,23 @@ export default class Navigation extends React.Component<NavigationPropsInterface
   _changeRecordingStatus = () => {
 
     if (this.state.recorderStatus) { // stop recording
+
       this.props.dispatch(setKeyForRecordSession(RECORD_SESSION_NOT_SET));
+      this.props.dispatch(setActionName(ACTIONS.STOP_RECORDING));
+
       recorder.closeSession(this.props.recordSessionKey, {
         storeSnapshot: this.props.store,
-        status: 'close'
+        status: ACTIONS.STOP_RECORDING
       });
     } else { // start recording
       const key = ToDoService.getShortUuid();
+
       this.props.dispatch(setKeyForRecordSession(key));
+      this.props.dispatch(setActionName(ACTIONS.START_RECORDING));
+
       recorder.openSession(key, {
         storeSnapshot: this.props.store,
-        status: 'open'
+        status: ACTIONS.START_RECORDING
       });
     }
 
@@ -100,6 +107,10 @@ export default class Navigation extends React.Component<NavigationPropsInterface
     );
   };
 
+  /**
+   * Add new todo element
+   *
+   */
   _addToDoFormCallback = (model: CreateFormToDoResponseInterface, confirm: boolean) => {
     if (confirm) {
       const toDo: ToDoElementInterface = {
@@ -110,7 +121,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
       };
 
       const updateToDoList = this.props.todoList.concat(toDo);
-      this.props.dispatch(updateToDo(updateToDoList));
+      this.props.dispatch(updateToDo(updateToDoList, ACTIONS.CREATE_TODO));
     }
 
     this.setState({
@@ -119,9 +130,18 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   };
 
-  render() {
+  shouldComponentUpdate(newProps: any, newState: any) {
+    if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
+      if ([ACTIONS.CREATE_TODO].includes(newProps.actionName))
+      recorder.updateSession(newProps.recordSessionKey, {
+        storeSnapshot: newProps.store,
+        status: newProps.actionName
+      })
+    }
+    return true;
+  };
 
-    console.log(this.props.recordSessionKey, 'this.props.recordSessionKey');
+  render() {
 
     const storage = recorder.getSessionStorage();
     const disableList = Object.keys(storage).length === 0;

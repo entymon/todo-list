@@ -1,17 +1,21 @@
 import {
+  SET_ACTION_NAME,
   UPDATE_TO_DO_LIST,
 } from '../actions/ToDoActions';
 import {ToDoElementInterface} from "../../components/ToDoElement";
 import RecorderService from "../../services/RecorderService";
+import {string} from "prop-types";
 
 const recorder = new RecorderService();
 
 export interface ToDoReducerStateInterface {
-  todoList: Array<ToDoElementInterface>
+  todoList: Array<ToDoElementInterface>;
+  actionName: string;
 }
 
 const initialState: ToDoReducerStateInterface = {
-  todoList: []
+  todoList: [],
+  actionName: ''
 };
 
 export default (state: ToDoReducerStateInterface = initialState, action: any) => {
@@ -20,21 +24,17 @@ export default (state: ToDoReducerStateInterface = initialState, action: any) =>
 
     case UPDATE_TO_DO_LIST:
 
-      const newState = {
+      return {
         ...state,
-        todoList: action.payload.toDoList
+        todoList: action.payload.toDoList,
+        actionName: action.payload.actionName
       };
 
-      // let singleSession = {};
-      // recorder.getSession(action.payload.sessionKey, (session: any) => {
-      //
-      //   singleSession = {...session, todoReducer: newState };
-      //   console.log(singleSession, 'singleSession');
-      // });
-
-
-
-      return newState;
+    case SET_ACTION_NAME:
+      return {
+        ...state,
+        actionName: action.payload
+      };
 
     default:
       return state;

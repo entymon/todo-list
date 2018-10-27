@@ -81,9 +81,12 @@ export default class RecorderService {
    */
   updateSession = (key: string, snapshot: SnapshotInterface) => {
     if (key !== RECORD_SESSION_NOT_SET) {
+
+      console.log(key, 'key');
+
       Promise.resolve(this.getSessionStorage())
         .then((storage: SessionStorageInterface) => {
-          storage[key].concat(snapshot);
+          storage[key].push(snapshot);
           this.updateSessionStorage(storage);
       })
     }

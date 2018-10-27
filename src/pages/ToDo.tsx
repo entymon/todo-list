@@ -5,8 +5,15 @@ import Navigation from "../components/Navigation";
 import ToDoElement, {ToDoElementInterface} from "../components/ToDoElement";
 import Modal, {ModalLabelsInterface} from "../components/Modal";
 import {updateToDo} from "../store/actions/ToDoActions";
+import {ACTIONS, RECORD_SESSION_NOT_SET} from "../constants/Constants";
+import RecorderService from "../services/RecorderService";
+
+const recorder = new RecorderService();
 
 export interface ToDoPagePropsInterface {
+  recordSessionKey?: string;
+  actionName?: string;
+  store?: any;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
 }
@@ -20,7 +27,10 @@ export interface ToDoPageStatesInterface {
 
 @(connect((store: any) => {
   return {
+    store,
+    recordSessionKey: store.recorderReducer.key,
     todoList: store.todoReducer.todoList,
+    actionName: store.todoReducer.actionName
   }
 }) as any)
 export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPageStatesInterface> {
@@ -62,7 +72,7 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     const filteredList = this.props.todoList.filter(element =>
       element.id !== id
     );
-    this.props.dispatch(updateToDo(filteredList));
+    this.props.dispatch(updateToDo(filteredList, ACTIONS.REMOVE_TODO));
   };
 
   /**
@@ -90,12 +100,23 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
       element.id !== data.id
     );
     const updateList = filteredList.concat(data);
-    this.props.dispatch(updateToDo(updateList));
+    this.props.dispatch(updateToDo(updateList, ACTIONS.UPDATE_TODO));
   };
 
   componentDidMount() {
     this._testToDoObject();
   }
+
+  shouldComponentUpdate(newProps: any, newState: any) {
+    if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
+      if ([ACTIONS.REMOVE_TODO, ACTIONS.UPDATE_TODO].includes(newProps.actionName))
+        recorder.updateSession(newProps.recordSessionKey, {
+          storeSnapshot: newProps.store,
+          status: newProps.actionName
+        })
+    }
+    return true;
+  };
 
   render() {
 
