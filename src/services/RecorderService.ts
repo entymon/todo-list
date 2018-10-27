@@ -76,7 +76,7 @@ export default class RecorderService {
   /**
    * Update session in Storage
    * @param {string} key
-   * @param store
+   * @param {SnapshotInterface} snapshot
    */
   updateSession = (key: string, snapshot: SnapshotInterface) => {
     if (key !== RECORD_SESSION_NOT_SET) {
