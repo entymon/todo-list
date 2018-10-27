@@ -22,6 +22,7 @@ export interface NavigationStatesInterface {
 }
 
 export interface NavigationPropsInterface {
+  recordSessionKey?: string;
   store?: any;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
@@ -30,6 +31,7 @@ export interface NavigationPropsInterface {
 @(connect((store: any) => {
   return {
     store,
+    recordSessionKey: store.recorderReducer.key,
     todoList: store.todoReducer.todoList
   }
 }) as any)
@@ -66,12 +68,20 @@ export default class Navigation extends React.Component<NavigationPropsInterface
    */
   _changeRecordingStatus = () => {
 
-    if (this.state.recorderStatus) { // stop recording
+    console.log(this.props.recordSessionKey, 'this.props.recordSessionKey');
 
+    if (this.state.recorderStatus) { // stop recording
+      recorder.closeSession(this.props.recordSessionKey, {
+        snapshot: this.props.store,
+        status: 'close'
+      });
     } else { // start recording
       const key = ToDoService.getShortUuid();
       this.props.dispatch(setKeyForRecordSession(key));
-      recorder.openSession(key, this.props.store);
+      recorder.openSession(key, {
+        snapshot: this.props.store,
+        status: 'open'
+      });
     }
 
     this.setState({

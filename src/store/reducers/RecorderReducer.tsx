@@ -15,7 +15,7 @@ export default (state: RecorderReducerStateInterface = initialState, action: any
     case SET_RECORD_KEY:
       return {
         ...state,
-        todoList: action.payload
+        key: action.payload
       };
 
     default:

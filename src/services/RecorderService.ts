@@ -1,7 +1,12 @@
 import {TODO_RECORD_STORAGE} from "../constants/Constants";
 
+export interface SnapshotInterface {
+  snapshot: any;
+  status: string;
+}
+
 export interface SessionStorageInterface {
-  [key: string] : Array<any>;
+  [key: string] : Array<SnapshotInterface>;
 }
 
 export default class RecorderService {
@@ -40,15 +45,28 @@ export default class RecorderService {
    * @param {string} key
    * @param store
    */
-  openSession = (key: string, store: any): void => {
+  openSession = (key: string, snapshot: SnapshotInterface): void => {
     Promise.resolve(this.getSessionStorage())
       .then((storage: SessionStorageInterface) => {
 
       storage[key] = [];
-      storage[key].concat(store);
+      storage[key].push(snapshot);
 
       this.updateSessionStorage(storage);
     });
+  };
+
+  /**
+   * Close session
+   * @param {string} key
+   * @param {SnapshotInterface} snapshot
+   */
+  closeSession = (key: string, snapshot: SnapshotInterface): void => {
+    Promise.resolve(this.getSessionStorage())
+      .then((storage: SessionStorageInterface) => {
+        storage[key].push(snapshot);
+        this.updateSessionStorage(storage);
+      });
   };
 
   /**
@@ -56,10 +74,10 @@ export default class RecorderService {
    * @param {string} key
    * @param store
    */
-  updateSession = (key: string, store: any) => {
+  updateSession = (key: string, snapshot: SnapshotInterface) => {
     Promise.resolve(this.getSessionStorage())
       .then((storage: SessionStorageInterface) => {
-        storage[key].concat(store);
+        storage[key].concat(snapshot);
         this.updateSessionStorage(storage);
     })
   };
