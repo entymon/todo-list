@@ -1,4 +1,4 @@
-import {TODO_RECORD_STORAGE} from "../constants/Constants";
+import {RECORD_SESSION_NOT_SET, TODO_RECORD_STORAGE} from "../constants/Constants";
 
 export interface SnapshotInterface {
   snapshot: any;
@@ -46,14 +46,16 @@ export default class RecorderService {
    * @param store
    */
   openSession = (key: string, snapshot: SnapshotInterface): void => {
-    Promise.resolve(this.getSessionStorage())
-      .then((storage: SessionStorageInterface) => {
+    if (key !== RECORD_SESSION_NOT_SET) {
+      Promise.resolve(this.getSessionStorage())
+        .then((storage: SessionStorageInterface) => {
 
-      storage[key] = [];
-      storage[key].push(snapshot);
+          storage[key] = [];
+          storage[key].push(snapshot);
 
-      this.updateSessionStorage(storage);
-    });
+          this.updateSessionStorage(storage);
+        });
+    }
   };
 
   /**
@@ -62,11 +64,13 @@ export default class RecorderService {
    * @param {SnapshotInterface} snapshot
    */
   closeSession = (key: string, snapshot: SnapshotInterface): void => {
-    Promise.resolve(this.getSessionStorage())
-      .then((storage: SessionStorageInterface) => {
-        storage[key].push(snapshot);
-        this.updateSessionStorage(storage);
-      });
+    if (key !== RECORD_SESSION_NOT_SET) {
+      Promise.resolve(this.getSessionStorage())
+        .then((storage: SessionStorageInterface) => {
+          storage[key].push(snapshot);
+          this.updateSessionStorage(storage);
+        });
+    }
   };
 
   /**
@@ -75,11 +79,13 @@ export default class RecorderService {
    * @param store
    */
   updateSession = (key: string, snapshot: SnapshotInterface) => {
-    Promise.resolve(this.getSessionStorage())
-      .then((storage: SessionStorageInterface) => {
-        storage[key].concat(snapshot);
-        this.updateSessionStorage(storage);
-    })
+    if (key !== RECORD_SESSION_NOT_SET) {
+      Promise.resolve(this.getSessionStorage())
+        .then((storage: SessionStorageInterface) => {
+          storage[key].concat(snapshot);
+          this.updateSessionStorage(storage);
+      })
+    }
   };
 
   /**
@@ -87,11 +93,13 @@ export default class RecorderService {
    * @param {string} key
    */
   removeSession = (key: string) => {
-    Promise.resolve(this.getSessionStorage())
-      .then((storage: SessionStorageInterface) => {
-        delete(storage[key]);
-        this.updateSessionStorage(storage);
-      })
+    if (key !== RECORD_SESSION_NOT_SET) {
+      Promise.resolve(this.getSessionStorage())
+        .then((storage: SessionStorageInterface) => {
+          delete(storage[key]);
+          this.updateSessionStorage(storage);
+        })
+    }
   };
 
   /**
@@ -100,9 +108,11 @@ export default class RecorderService {
    * @param {(storage: Array<any>) => void} callback
    */
   getSession = (key: string, callback: (storage: Array<any>) => void ) => {
-    Promise.resolve(this.getSessionStorage())
-      .then((storage: SessionStorageInterface) => {
-        callback(storage[key]);
-      })
+    if (key !== RECORD_SESSION_NOT_SET) {
+      Promise.resolve(this.getSessionStorage())
+        .then((storage: SessionStorageInterface) => {
+          callback(storage[key]);
+        })
+    }
   };
 }

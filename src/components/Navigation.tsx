@@ -11,6 +11,7 @@ import {updateToDo} from "../store/actions/ToDoActions";
 import ToDoService from "../services/ToDoService";
 import RecorderService from "../services/RecorderService";
 import {setKeyForRecordSession} from "../store/actions/RecorderActions";
+import {RECORD_SESSION_NOT_SET} from "../constants/Constants";
 
 const recorder = new RecorderService();
 const recordStorage = recorder.getSessionStorage();
@@ -75,6 +76,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
         snapshot: this.props.store,
         status: 'close'
       });
+      this.props.dispatch(setKeyForRecordSession(RECORD_SESSION_NOT_SET));
     } else { // start recording
       const key = ToDoService.getShortUuid();
       this.props.dispatch(setKeyForRecordSession(key));
