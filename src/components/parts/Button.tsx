@@ -5,7 +5,7 @@ export interface IconButtonInterfaceProps {
   icon: any | false,
   disabled: boolean,
   active: boolean,
-  callback: any
+  callback?: any
 }
 
 export default class Button extends React.Component<IconButtonInterfaceProps, {}> {
@@ -22,7 +22,7 @@ export default class Button extends React.Component<IconButtonInterfaceProps, {}
     return (
       <div
         className={`button ${this.props.active ? 'button-active' : ''}`}
-        onClick={() => this.props.callback()}
+        onClick={!this.props.disabled ? (() => this.props.callback()) : (() => {})}
         style={{
           opacity: this.props.disabled ? 0.4 : 1,
         }}

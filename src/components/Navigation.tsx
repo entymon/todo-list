@@ -69,8 +69,6 @@ export default class Navigation extends React.Component<NavigationPropsInterface
    */
   _changeRecordingStatus = () => {
 
-    console.log(this.props.recordSessionKey, 'this.props.recordSessionKey');
-
     if (this.state.recorderStatus) { // stop recording
       recorder.closeSession(this.props.recordSessionKey, {
         snapshot: this.props.store,
@@ -105,6 +103,9 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   render() {
 
+    const storage = recorder.getSessionStorage();
+    const disableList = Object.keys(storage).length === 0;
+
     return (
       <div className="content">
 
@@ -118,7 +119,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
               active={this.state.toggleListOfRecords}
               label={'List of Records'}
               icon={this._renderListIcon()}
-              disabled={true} // if list of records is empty its nothing to see
+              disabled={disableList} // if list of records is empty its nothing to see
               callback={this._toggleListOfRecords}
             />
           </div>

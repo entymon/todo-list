@@ -30,6 +30,7 @@ export default class RecorderService {
     if (localStorage.getItem(TODO_RECORD_STORAGE)) {
       return JSON.parse(localStorage.getItem(TODO_RECORD_STORAGE));
     }
+    return false
   };
 
   /**
