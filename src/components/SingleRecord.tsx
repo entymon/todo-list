@@ -42,15 +42,12 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
 
       this.props.dispatch(savePresentToDoState(this.props.todoReducer));
 
-      const all = Array.prototype;
       storeSnapshots.map((singleSnapshot: any) => {
 
-
+        /**
+         * TODO: add queue ith delay between events
+         */
         this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
-
-
-        // this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
-
       });
 
     });
@@ -97,7 +94,7 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
             />)}
 
             {this.state.played && (<div
-              className="control-icon pause-icon"
+              className="control-icon stop-icon"
               onClick={this._pausePlaying}
             />)}
 

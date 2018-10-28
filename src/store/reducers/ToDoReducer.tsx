@@ -23,8 +23,6 @@ const initialState: ToDoReducerStateInterface = {
 
 export default (state: ToDoReducerStateInterface = initialState, action: any) => {
 
-  console.log(action.payload, 'action.payload');
-
   switch (action.type) {
 
     case UPDATE_TO_DO_LIST:
