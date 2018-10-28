@@ -13,6 +13,7 @@ export interface SingleRecordPropsInterface {
   removeCallback: any;
   dispatch?: any;
   todoReducer?: any;
+  restore?: any;
 }
 
 export interface SingleRecordStatsInterface {
@@ -22,7 +23,8 @@ export interface SingleRecordStatsInterface {
 
 @(connect((store: any) => {
   return {
-    todoReducer: store.todoReducer
+    todoReducer: store.todoReducer,
+    restore: store.recorderReducer.restore
   }
 }) as any)
 export default class SingleRecord extends React.Component<SingleRecordPropsInterface, SingleRecordStatsInterface> {
@@ -53,10 +55,11 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
     });
   };
 
-  _pausePlaying = () => {
+  stopPlayingAndRestoreSession = () => {
     this.setState({
       played: false
-    })
+    });
+    this.props.dispatch(playEpisode(this.props.restore));
   };
 
   _removeHandler = () => {
@@ -95,7 +98,7 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
 
             {this.state.played && (<div
               className="control-icon stop-icon"
-              onClick={this._pausePlaying}
+              onClick={this.stopPlayingAndRestoreSession}
             />)}
 
             <div className="control-icon trash-icon" onClick={this._removeHandler}>

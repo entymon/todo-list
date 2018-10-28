@@ -7,11 +7,6 @@ export const setKeyForRecordSession = (key: string) => ({
   payload: key
 });
 
-export const playSelectedSession = (storeSnapshots: Array<any>) => ({
-  type: PREPARE_SELECTED_SESSION,
-  payload: storeSnapshots
-});
-
 export const savePresentToDoState = (toDoState: any) => ({
   type: SAVE_CURRENT_TODD,
   payload: toDoState

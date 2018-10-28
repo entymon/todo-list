@@ -1,17 +1,17 @@
 import {
-  PREPARE_SELECTED_SESSION,
+  PREPARE_SELECTED_SESSION, SAVE_CURRENT_TODD,
   SET_RECORD_KEY
 } from "../actions/RecorderActions";
 import {RECORD_SESSION_NOT_SET} from "../../constants/Constants";
 
 export interface RecorderReducerStateInterface {
   key: string;
-  history: Array<any>;
+  restore: any;
 }
 
 const initialState: RecorderReducerStateInterface = {
   key: RECORD_SESSION_NOT_SET,
-  history: []
+  restore: {}
 };
 
 export default (state: RecorderReducerStateInterface = initialState, action: any) => {
@@ -24,10 +24,10 @@ export default (state: RecorderReducerStateInterface = initialState, action: any
         key: action.payload
       };
 
-    case PREPARE_SELECTED_SESSION:
+    case SAVE_CURRENT_TODD:
       return {
         ...state,
-        history: action.payload,
+        restore: action.payload,
       };
 
     default:
