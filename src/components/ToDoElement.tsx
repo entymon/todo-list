@@ -202,7 +202,7 @@ export default class ToDoElement extends React.Component<ToDoElementPropsInterfa
                   {this.props.data.id} # {this.state.name}
                 </div>
                 <div>
-                  {this.state.date.format(DATE_FORMAT)}
+                  {moment(this.state.date).format(DATE_FORMAT)}
                 </div>
               </div>
               <div className={`todo-content__description ${todoDescriptionCoverClass}`}>

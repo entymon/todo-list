@@ -76,7 +76,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
       this.props.dispatch(setActionName(ACTIONS.STOP_RECORDING));
 
       recorder.closeSession(this.props.recordSessionKey, {
-        storeSnapshot: this.props.store,
+        storeSnapshot: this.props.store.todoReducer,
         status: ACTIONS.STOP_RECORDING
       });
     } else { // start recording
@@ -86,7 +86,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
       this.props.dispatch(setActionName(ACTIONS.START_RECORDING));
 
       recorder.openSession(key, {
-        storeSnapshot: this.props.store,
+        storeSnapshot: this.props.store.todoReducer,
         status: ACTIONS.START_RECORDING
       });
     }

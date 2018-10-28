@@ -1,4 +1,5 @@
 import {
+  PLAY_EPISODE,
   SET_ACTION_NAME,
   UPDATE_TO_DO_LIST,
 } from '../actions/ToDoActions';
@@ -11,14 +12,18 @@ const recorder = new RecorderService();
 export interface ToDoReducerStateInterface {
   todoList: Array<ToDoElementInterface>;
   actionName: string;
+  present: any
 }
 
 const initialState: ToDoReducerStateInterface = {
   todoList: [],
-  actionName: ''
+  actionName: '',
+  present: {}
 };
 
 export default (state: ToDoReducerStateInterface = initialState, action: any) => {
+
+  console.log(action.payload, 'action.payload');
 
   switch (action.type) {
 
@@ -34,6 +39,11 @@ export default (state: ToDoReducerStateInterface = initialState, action: any) =>
       return {
         ...state,
         actionName: action.payload
+      };
+
+    case PLAY_EPISODE:
+      return {
+        ...action.payload,
       };
 
     default:

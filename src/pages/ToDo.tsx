@@ -111,7 +111,7 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
     if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
       if ([ACTIONS.REMOVE_TODO, ACTIONS.UPDATE_TODO].includes(newProps.actionName))
         recorder.updateSession(newProps.recordSessionKey, {
-          storeSnapshot: newProps.store,
+          storeSnapshot: newProps.store.todoReducer,
           status: newProps.actionName
         })
     }
@@ -137,7 +137,7 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
 
         <Navigation />
         {
-          this.props.todoList.map((element: ToDoElementInterface) => (
+          this.props.todoList && this.props.todoList.map((element: ToDoElementInterface) => (
             <ToDoElement
               key={`todo-element-${element.id}`}
               data={element}

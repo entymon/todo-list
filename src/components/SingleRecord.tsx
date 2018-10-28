@@ -1,12 +1,18 @@
 import React from 'react';
 import {SnapshotInterface} from "../services/RecorderService";
 import Modal from "./Modal";
+import {connect} from "react-redux";
+import {savePresentToDoState} from "../store/actions/RecorderActions";
+import RecorderService from "../services/RecorderService";
+import {playEpisode} from "../store/actions/ToDoActions";
 const removeIcon = require('../assets/images/trash.svg') as string;
 
 export interface SingleRecordPropsInterface {
   snapshots: Array<SnapshotInterface>
   snapshotId: string;
   removeCallback: any;
+  dispatch?: any;
+  todoReducer?: any;
 }
 
 export interface SingleRecordStatsInterface {
@@ -14,6 +20,11 @@ export interface SingleRecordStatsInterface {
   showAlert: boolean;
 }
 
+@(connect((store: any) => {
+  return {
+    todoReducer: store.todoReducer
+  }
+}) as any)
 export default class SingleRecord extends React.Component<SingleRecordPropsInterface, SingleRecordStatsInterface> {
 
   state = {
@@ -21,10 +32,24 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
     showAlert: false
   };
 
-  _startPlaying = () => {
+  _startPlaying = (key: string) => {
     this.setState({
       played: true
-    })
+    });
+
+    const recorder = new RecorderService();
+    recorder.getSession(key, (storeSnapshots: Array<any>) => {
+
+      this.props.dispatch(savePresentToDoState(this.props.todoReducer));
+
+      storeSnapshots.map((singleSnapshot: any) => {
+      console.log(singleSnapshot, 'singleSnapshot');
+
+          this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
+
+      });
+
+    });
   };
 
   _pausePlaying = () => {
@@ -64,7 +89,7 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
 
             {!this.state.played && (<div
               className="control-icon play-icon"
-              onClick={this._startPlaying}
+              onClick={() => this._startPlaying(this.props.snapshotId)}
             />)}
 
             {this.state.played && (<div
