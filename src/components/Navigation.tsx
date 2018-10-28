@@ -29,6 +29,7 @@ export interface NavigationPropsInterface {
   played?: boolean;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
+  playedSessionId?: string;
 }
 
 @(connect((store: any) => {
@@ -37,7 +38,8 @@ export interface NavigationPropsInterface {
     recordSessionKey: store.recorderReducer.key,
     todoList: store.todoReducer.todoList,
     actionName: store.todoReducer.actionName,
-    played: store.recorderReducer.played
+    played: store.recorderReducer.played,
+    playedSessionId: store.recorderReducer.playedSessionId,
   }
 }) as any)
 export default class Navigation extends React.Component<NavigationPropsInterface, NavigationStatesInterface> {

@@ -2,7 +2,7 @@ import React from 'react';
 import {SnapshotInterface} from "../services/RecorderService";
 import Modal from "./Modal";
 import {connect} from "react-redux";
-import {savePresentToDoState, stopPlaying} from "../store/actions/RecorderActions";
+import {savePresentToDoState, setPlayedSessionId, stopPlaying} from "../store/actions/RecorderActions";
 import RecorderService from "../services/RecorderService";
 import {playEpisode} from "../store/actions/ToDoActions";
 const removeIcon = require('../assets/images/trash.svg') as string;
@@ -20,7 +20,6 @@ export interface SingleRecordPropsInterface {
 
 export interface SingleRecordStatsInterface {
   showAlert: boolean;
-  played: boolean;
 }
 
 @(connect((store: any) => {
@@ -34,17 +33,14 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
 
   state = {
     showAlert: false,
-    played: false
   };
 
   _startPlaying = (key: string) => {
-    this.setState({
-      played: true,
-    });
     const recorder = new RecorderService();
     recorder.getSession(key, (storeSnapshots: Array<any>) => {
 
       this.props.dispatch(savePresentToDoState(this.props.todoReducer));
+      this.props.dispatch(setPlayedSessionId(key));
 
       storeSnapshots.map((singleSnapshot: any) => {
 
@@ -58,9 +54,6 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
   };
 
   stopPlayingAndRestoreSession = () => {
-    this.setState({
-      played: false,
-    });
     this.props.dispatch(playEpisode(this.props.restore));
     this.props.dispatch(stopPlaying());
   };
@@ -92,12 +85,12 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
           <div className="title">Session ID: {this.props.snapshotId}</div>
           <div className="controls">
 
-            {!this.state.played && (<div
+            {!this.props.played && (<div
               className="control-icon play-icon"
               onClick={() => this._startPlaying(this.props.snapshotId)}
             />)}
 
-            {this.state.played && (<div
+            {this.props.played && (<div
               className="control-icon restore-icon"
               onClick={this.stopPlayingAndRestoreSession}
             >

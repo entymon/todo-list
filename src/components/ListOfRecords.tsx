@@ -1,14 +1,24 @@
 import React from 'react';
 import {default as RecorderService, SessionStorageInterface} from "../services/RecorderService";
 import SingleRecord from "./SingleRecord";
+import {connect} from "react-redux";
 
 const recorder = new RecorderService();
 
 export interface ListOfRecordsPropsInterface {
   sessions: SessionStorageInterface,
   callbackStorageUpdate: any;
+
+  played?: boolean;
+  playedSessionId?: string;
 }
 
+@(connect((store: any) => {
+  return {
+    played: store.recorderReducer.played,
+    playedSessionId: store.recorderReducer.playedSessionId,
+  }
+}) as any)
 export default class ListOfRecords extends React.Component<ListOfRecordsPropsInterface, {}> {
 
   /**
@@ -42,12 +52,16 @@ export default class ListOfRecords extends React.Component<ListOfRecordsPropsInt
   _renderSingleRecord = (keys: Array<string>) => {
     return keys.map((sessionKey: string) => {
       const sessionContent = this.props.sessions[sessionKey];
-      return (<SingleRecord
-        key={sessionKey}
-        snapshotId={sessionKey}
-        snapshots={sessionContent}
-        removeCallback={this._removeRecordedSession}
-      />)
+
+      // Render all if not played - render one if played
+      if (!this.props.played || (this.props.played && this.props.playedSessionId === sessionKey)) {
+        return (<SingleRecord
+          key={sessionKey}
+          snapshotId={sessionKey}
+          snapshots={sessionContent}
+          removeCallback={this._removeRecordedSession}
+        />)
+      }
     });
   };
 
