@@ -9,4 +9,6 @@ export const ACTIONS = {
   CREATE_TODO: 'create',
   REMOVE_TODO: 'remove',
   UPDATE_TODO: 'update',
+
+  RESET: ''
 };

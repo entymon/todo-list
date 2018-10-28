@@ -4,7 +4,7 @@ import moment = require("moment");
 import Navigation from "../components/Navigation";
 import ToDoElement, {ToDoElementInterface} from "../components/ToDoElement";
 import Modal, {ModalLabelsInterface} from "../components/Modal";
-import {updateToDo} from "../store/actions/ToDoActions";
+import {setActionName, updateToDo} from "../store/actions/ToDoActions";
 import {ACTIONS, RECORD_SESSION_NOT_SET} from "../constants/Constants";
 import RecorderService from "../services/RecorderService";
 
@@ -109,11 +109,13 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
 
   shouldComponentUpdate(newProps: any, newState: any) {
     if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
-      if ([ACTIONS.REMOVE_TODO, ACTIONS.UPDATE_TODO].includes(newProps.actionName))
+      if ([ACTIONS.REMOVE_TODO, ACTIONS.UPDATE_TODO].includes(newProps.actionName)) {
         recorder.updateSession(newProps.recordSessionKey, {
           storeSnapshot: newProps.store.todoReducer,
           status: newProps.actionName
-        })
+        });
+        this.props.dispatch(setActionName(ACTIONS.RESET));
+      }
     }
     return true;
   };

@@ -142,11 +142,13 @@ export default class Navigation extends React.Component<NavigationPropsInterface
 
   shouldComponentUpdate(newProps: any, newState: any) {
     if (newProps.recordSessionKey !== RECORD_SESSION_NOT_SET) {
-      if ([ACTIONS.CREATE_TODO].includes(newProps.actionName))
-      recorder.updateSession(newProps.recordSessionKey, {
-        storeSnapshot: newProps.store,
-        status: newProps.actionName
-      })
+      if ([ACTIONS.CREATE_TODO].includes(newProps.actionName)) {
+        recorder.updateSession(newProps.recordSessionKey, {
+          storeSnapshot: newProps.store,
+          status: newProps.actionName
+        });
+        this.props.dispatch(setActionName(ACTIONS.RESET))
+      }
     }
     return true;
   };

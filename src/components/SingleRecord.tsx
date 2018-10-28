@@ -42,10 +42,14 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
 
       this.props.dispatch(savePresentToDoState(this.props.todoReducer));
 
+      const all = Array.prototype;
       storeSnapshots.map((singleSnapshot: any) => {
-      console.log(singleSnapshot, 'singleSnapshot');
 
-          this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
+
+        this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
+
+
+        // this.props.dispatch(playEpisode(singleSnapshot.storeSnapshot));
 
       });
 
