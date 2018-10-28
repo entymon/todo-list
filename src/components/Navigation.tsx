@@ -26,6 +26,7 @@ export interface NavigationPropsInterface {
   recordSessionKey?: string;
   actionName?: string;
   store?: any;
+  played?: boolean;
   todoList?: Array<ToDoElementInterface>;
   dispatch?: any;
 }
@@ -35,7 +36,8 @@ export interface NavigationPropsInterface {
     store,
     recordSessionKey: store.recorderReducer.key,
     todoList: store.todoReducer.todoList,
-    actionName: store.todoReducer.actionName
+    actionName: store.todoReducer.actionName,
+    played: store.recorderReducer.played
   }
 }) as any)
 export default class Navigation extends React.Component<NavigationPropsInterface, NavigationStatesInterface> {
@@ -163,14 +165,18 @@ export default class Navigation extends React.Component<NavigationPropsInterface
         <div className="navigation">
 
           <div className="nav-section">
-            <Recorder status={this.state.recorderStatus} callback={this._changeRecordingStatus}/>
+            <Recorder
+              status={this.state.recorderStatus}
+              callback={this._changeRecordingStatus}
+              disabled={this.props.played}
+            />
           </div>
           <div className="nav-section">
             <Button
               active={this.state.toggleListOfRecords}
               label={'List of Records'}
               icon={this._renderListIcon()}
-              disabled={disableList} // if list of records is empty its nothing to see
+              disabled={disableList || this.props.played} // if list of records is empty its nothing to see
               callback={this._toggleListOfRecords}
             />
           </div>
@@ -179,7 +185,7 @@ export default class Navigation extends React.Component<NavigationPropsInterface
               active={this.state.toggleAddNewToDo}
               label={this.state.toggleAddNewToDo ? 'Close' : 'Create'}
               icon={this._renderPlusIcon()}
-              disabled={false}
+              disabled={this.props.played}
               callback={this._toggleCreateToDo}
             />
           </div>

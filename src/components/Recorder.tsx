@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface RecorderInterfaceProps {
+  disabled: boolean
   status: boolean
   callback: any
 }
@@ -9,6 +10,7 @@ export default class Recorder extends React.Component<RecorderInterfaceProps, {}
 
   static defaultProps = {
     status: false,
+    disabled: false,
   };
 
   render() {
@@ -16,7 +18,10 @@ export default class Recorder extends React.Component<RecorderInterfaceProps, {}
     return (
       <div
         className={`recorder ${this.props.status ? 'stop-recording-class' : 'start-recording-class'}`}
-        onClick={() => this.props.callback()}
+        onClick={this.props.disabled ? () => {} : () => this.props.callback()}
+        style={{
+          opacity: this.props.disabled ? .5 : 1,
+        }}
       >
         <div>Recording: </div>
         <div
