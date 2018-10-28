@@ -82,6 +82,12 @@
             width: 28px;
           }
         }
+        &.restore-icon {
+          margin: 0 10px;
+          > img {
+            width: 24px;
+          }
+        }
       }
     }
   }

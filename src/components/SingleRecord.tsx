@@ -6,6 +6,7 @@ import {savePresentToDoState, stopPlaying} from "../store/actions/RecorderAction
 import RecorderService from "../services/RecorderService";
 import {playEpisode} from "../store/actions/ToDoActions";
 const removeIcon = require('../assets/images/trash.svg') as string;
+const restoreIcon = require('../assets/images/restore-icon.png') as string;
 
 export interface SingleRecordPropsInterface {
   snapshots: Array<SnapshotInterface>
@@ -19,6 +20,7 @@ export interface SingleRecordPropsInterface {
 
 export interface SingleRecordStatsInterface {
   showAlert: boolean;
+  played: boolean;
 }
 
 @(connect((store: any) => {
@@ -31,10 +33,14 @@ export interface SingleRecordStatsInterface {
 export default class SingleRecord extends React.Component<SingleRecordPropsInterface, SingleRecordStatsInterface> {
 
   state = {
-    showAlert: false
+    showAlert: false,
+    played: false
   };
 
   _startPlaying = (key: string) => {
+    this.setState({
+      played: true,
+    });
     const recorder = new RecorderService();
     recorder.getSession(key, (storeSnapshots: Array<any>) => {
 
@@ -52,6 +58,9 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
   };
 
   stopPlayingAndRestoreSession = () => {
+    this.setState({
+      played: false,
+    });
     this.props.dispatch(playEpisode(this.props.restore));
     this.props.dispatch(stopPlaying());
   };
@@ -83,17 +92,17 @@ export default class SingleRecord extends React.Component<SingleRecordPropsInter
           <div className="title">Session ID: {this.props.snapshotId}</div>
           <div className="controls">
 
-            <div className="control-icon fast-play-icon" />
-
-            {!this.props.played && (<div
+            {!this.state.played && (<div
               className="control-icon play-icon"
               onClick={() => this._startPlaying(this.props.snapshotId)}
             />)}
 
-            {this.props.played && (<div
-              className="control-icon stop-icon"
+            {this.state.played && (<div
+              className="control-icon restore-icon"
               onClick={this.stopPlayingAndRestoreSession}
-            />)}
+            >
+              <img src={restoreIcon} alt="restore remove"/>
+            </div>)}
 
             <div className="control-icon trash-icon" onClick={this._removeHandler}>
               <img src={removeIcon} alt="record remove"/>
