@@ -104,7 +104,7 @@ export default class ToDo extends React.Component<ToDoPagePropsInterface, ToDoPa
   };
 
   componentDidMount() {
-    this._testToDoObject();
+    // this._testToDoObject();
   }
 
   shouldComponentUpdate(newProps: any, newState: any) {
